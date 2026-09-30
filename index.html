@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="lang-zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TaskList Inspector · 在线进程分析 · 目标软件识别</title>
+  <meta name="description" content="在线进程分析工具（中/英）：粘贴 tasklist / ps aux / ps -ef / top / NetExec 输出，自动识别浏览器、杀毒软件/EDR、远程控制、数据库、Web 服务等常见软件。Online process analyzer: identify AV/EDR, browsers, remote tools, databases and more from tasklist/ps output. 纯浏览器本地运行，数据不上传。" />
+  <meta name="keywords" content="进程分析,tasklist,ps aux,信息收集,渗透测试,EDR识别,process analyzer,netexec,CME" />
+  <script>
+    /* 尽早设置语言 class, 避免双语区块闪烁(FOUC) */
+    (function () {
+      try {
+        var l = null;
+        var q = location.search.match(/[?&]lang=(zh|en)(?:&|$)/);
+        if (q) l = q[1];
+        if (!l) l = localStorage.getItem("tli-lang");
+        if (!l) l = ((navigator.language || "").toLowerCase().indexOf("zh") === 0) ? "zh" : "en";
+        if (l !== "en") l = "zh";
+        document.documentElement.className = "lang-" + l;
+        document.documentElement.lang = (l === "zh") ? "zh-CN" : "en";
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/>
+            </linearGradient>
+          </defs>
+          <rect x="4" y="4" width="56" height="56" rx="14" fill="#0f1721" stroke="url(#lg)" stroke-width="3"/>
+          <path d="M18 22l10 10-10 10" stroke="url(#lg)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M34 44h14" stroke="#e2e8f0" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-en">TaskList Inspector</span>
+        <span class="brand-cn" data-i18n="brand.sub">在线进程分析</span>
+      </div>
+      <div class="spacer"></div>
+      <button id="langBtn" class="top-link" type="button" data-i18n="lang.btn" data-i18n-title="lang.title">EN</button>
+      <a class="top-link" href="https://github.com/badboycxcc/Tasklist" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <div class="lang-zh">
+        <h1>在线进程分析 · 快速摸清目标主机软件环境</h1>
+        <p class="lead">
+          粘贴进程列表（tasklist / ps aux / ps -ef / top / NetExec 等），自动识别浏览器、杀毒软件 / EDR、远程控制、隧道代理、
+          数据库、Web 服务、开发工具等常见软件特征，一键生成可用于渗透测试前期信息收集与资产盘点的软件画像。
+        </p>
+      </div>
+      <div class="lang-en">
+        <h1>Online Process Analyzer · know the target's software at a glance</h1>
+        <p class="lead">
+          Paste a process list (tasklist / ps aux / ps -ef / top / NetExec logs) and instantly identify browsers, AV/EDR,
+          remote-control tools, tunnels, databases, web services and developer tools — a software profile for pentest
+          recon and asset inventory, generated in one click.
+        </p>
+      </div>
+      <div class="hero-chips lang-zh">
+        <span class="pill">支持 <b>Windows &amp; Linux</b></span>
+        <span class="pill">签名库 <b>400+ 条</b></span>
+        <span class="pill">纯浏览器本地运行 · <b>数据不上传</b></span>
+        <span class="pill">自动清洗 NetExec/CME 日志前缀</span>
+        <span class="pill">可下载后 <b>离线使用</b></span>
+      </div>
+      <div class="hero-chips lang-en">
+        <span class="pill">Supports <b>Windows &amp; Linux</b></span>
+        <span class="pill"><b>400+</b> signatures</span>
+        <span class="pill">Runs locally · <b>no data uploaded</b></span>
+        <span class="pill">Cleans NetExec/CME log prefixes</span>
+        <span class="pill"><b>Offline</b>-ready</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2 data-i18n="sec.input">① 粘贴进程列表</h2>
+        <div class="spacer"></div>
+        <label for="platformSel" style="color:var(--txt3);font-size:13px" data-i18n="lbl.platform">平台</label>
+        <select id="platformSel" class="platform" title="通常无需手动选择, 会自动识别">
+          <option value="" data-i18n="opt.auto">自动识别</option>
+          <option value="w">Windows</option>
+          <option value="l">Linux / Unix</option>
+        </select>
+      </div>
+      <textarea id="input" spellcheck="false" data-i18n-ph="ph.input" placeholder="在此粘贴 tasklist、tasklist /fo csv、PowerShell Get-Process、ps aux、ps -ef、top 等命令的输出..."></textarea>
+      <div class="input-actions">
+        <button id="btnAnalyze" class="btn btn-primary" data-i18n="btn.analyze">开始分析 (Ctrl/⌘ + Enter)</button>
+        <button id="btnSampleWin" class="btn" data-i18n="btn.sampleWin">Windows 示例</button>
+        <button id="btnSampleNix" class="btn" data-i18n="btn.sampleNix">Linux 示例</button>
+        <button id="btnSampleNxc" class="btn" data-i18n="btn.sampleNxc">nxc/CME 示例</button>
+        <button id="btnClear" class="btn" data-i18n="btn.clear">清空</button>
+        <span id="inputMeta" class="input-meta"></span>
+      </div>
+      <p class="privacy-note" data-i18n="privacy">🔒 所有分析均在浏览器本地完成，输入内容不会上传到任何服务器；页面无任何第三方依赖，也可下载后完全离线使用。</p>
+    </section>
+
+    <section id="results" class="hidden">
+
+      <div id="parseNote" class="parse-note hidden"></div>
+
+      <div id="statsGrid" class="stat-grid"></div>
+
+      <section id="profileCard" class="card hidden">
+        <div class="card-head"><h2 data-i18n="sec.profile">🎯 主机画像线索</h2></div>
+        <ul id="profileList" class="profile-list"></ul>
+      </section>
+
+      <section id="findingsCard" class="card hidden">
+        <div class="card-head"><h2 data-i18n="sec.findings">🔎 关键发现</h2></div>
+        <div id="findingsGrid" class="finding-grid"></div>
+      </section>
+
+      <section id="cmdCard" class="card hidden">
+        <div class="card-head"><h2 data-i18n="sec.cmd">⚡ 命令行关键字发现</h2></div>
+        <div id="cmdList"></div>
+      </section>
+
+      <section id="susCard" class="card hidden">
+        <div class="card-head"><h2 data-i18n="sec.sus">⚠️ 可疑提示</h2></div>
+        <div id="susList"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="sec.tables">📋 识别明细</h2>
+          <div class="spacer"></div>
+          <input id="filterInput" class="filter-input" data-i18n-ph="ph.filter" placeholder="筛选进程 / 软件名..." />
+        </div>
+        <div class="result-actions">
+          <button id="btnCopy" class="btn btn-sm" data-i18n="btn.copy">📋 复制报告</button>
+          <button id="btnDownloadMd" class="btn btn-sm" data-i18n="btn.md">⬇ 下载 Markdown</button>
+          <button id="btnDownloadJson" class="btn btn-sm" data-i18n="btn.json">⬇ 下载 JSON</button>
+          <button id="btnDownloadTxt" class="btn btn-sm" data-i18n="btn.txt">⬇ 下载 TXT</button>
+        </div>
+        <div id="tablesWrap"></div>
+      </section>
+
+      <section id="unresolvedCard" class="card hidden">
+        <div class="card-head">
+          <h2 data-i18n="sec.unresolved">❓ 未识别进程</h2>
+          <div class="spacer"></div>
+          <span id="unresolvedCount" style="color:var(--txt3);font-size:12px;font-family:var(--mono)"></span>
+        </div>
+        <div id="unresolvedChips" class="unresolved-chips"></div>
+      </section>
+
+    </section>
+
+    <section class="card guide">
+      <div class="card-head"><h2 data-i18n="sec.guide">📖 支持的输入格式与使用建议</h2></div>
+      <div class="lang-zh">
+        <p>工具会自动识别粘贴内容的格式与操作系统，通常无需手动指定平台。获取更完整的进程信息有助于提升识别率：</p>
+        <details open>
+          <summary>Windows · 推荐命令</summary>
+          <pre>tasklist                          # 默认表格
+tasklist /fo csv                  # CSV 格式(推荐, 字段完整)
+tasklist /svc                     # 附带服务信息
+powershell "Get-Process"          # PowerShell 输出</pre>
+        </details>
+        <details>
+          <summary>Linux · 推荐命令</summary>
+          <pre>ps auxf                           # 进程树, 含完整命令行(推荐)
+ps -ef                            # System V 风格
+top -bn1                          # 非交互式 top 输出</pre>
+        </details>
+        <details>
+          <summary>NetExec / CrackMapExec · 直接粘贴日志即可</summary>
+          <pre>nxc smb 192.168.9.0/24 -u user -p pass -x "tasklist"
+# 或 atexec / wmiexec 等执行 tasklist 后, 直接粘贴带前缀的输出
+
+SMB   192.168.9.92   445   AS-PC   Image Name    PID  Session Name ...
+SMB   192.168.9.92   445   AS-PC   svchost.exe   804  Services   0 ...
+# ↑ 工具会自动剥离 [协议 IP 端口 主机名] 前缀, 并丢弃 [+] 类状态行</pre>
+        </details>
+        <details>
+          <summary>识别能力说明</summary>
+          <ul>
+            <li><b>软件识别</b>：浏览器、杀毒软件 / EDR / HIDS、远程控制、内网穿透、VPN / 零信任、数据库、Web 服务、容器 / K8s、开发工具、办公通讯、云厂商 Agent 等。</li>
+            <li><b>命令行关键字</b>：对 java / python 等宿主进程，会进一步扫描完整命令行识别 Burp Suite、SQLMap、Metasploit、宝塔面板等。</li>
+            <li><b>可疑启发式</b>：仿冒系统进程名（如 svch0st.exe / scvhost.exe）、双扩展名、非 ASCII 同形字、从临时 / 公共目录运行等。</li>
+            <li><b>主机画像</b>：综合识别结果推断服务器角色、办公终端、企业域环境、云主机、虚拟化等环境线索。</li>
+          </ul>
+        </details>
+      </div>
+      <div class="lang-en">
+        <p>Formats and the operating system are auto-detected — no need to pick a platform manually. Fuller command lines give better detection:</p>
+        <details open>
+          <summary>Windows · recommended commands</summary>
+          <pre>tasklist                          # default table
+tasklist /fo csv                  # CSV (recommended, full fields)
+tasklist /svc                     # include service names
+powershell "Get-Process"          # PowerShell output</pre>
+        </details>
+        <details>
+          <summary>Linux · recommended commands</summary>
+          <pre>ps auxf                           # process tree with full command lines (recommended)
+ps -ef                            # System V style
+top -bn1                          # non-interactive top output</pre>
+        </details>
+        <details>
+          <summary>NetExec / CrackMapExec · paste the log directly</summary>
+          <pre>nxc smb 192.168.9.0/24 -u user -p pass -x "tasklist"
+# or capture tasklist via atexec / wmiexec and paste the prefixed output
+
+SMB   192.168.9.92   445   AS-PC   Image Name    PID  Session Name ...
+SMB   192.168.9.92   445   AS-PC   svchost.exe   804  Services   0 ...
+# The [protocol ip port host] prefix is stripped automatically; [+] status lines are dropped</pre>
+        </details>
+        <details>
+          <summary>Detection capabilities</summary>
+          <ul>
+            <li><b>Software identification</b>: browsers, AV/EDR/HIDS, remote control, tunnels, VPN/zero-trust, databases, web services, containers/K8s, dev tools, office/IM suites, cloud agents and more.</li>
+            <li><b>Command-line keywords</b>: for hosts like java / python, the full command line is scanned to spot Burp Suite, SQLMap, Metasploit, BT Panel etc.</li>
+            <li><b>Suspicious heuristics</b>: typosquatted system process names (svch0st.exe / scvhost.exe), double extensions, non-ASCII homoglyphs, execution from temp/public directories.</li>
+            <li><b>Host profiling</b>: infers server role, office workstation, enterprise domain environment, cloud instance, virtualization and more.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="lang-zh">
+        <p class="warn">⚠️ 本工具仅供授权的安全测试、资产盘点与应急响应使用。使用者应确保对目标系统拥有合法授权，并遵守当地法律法规。</p>
+        <p>TaskList Inspector · 开源地址 <a href="https://github.com/badboycxcc/Tasklist" target="_blank" rel="noopener noreferrer">GitHub</a> · 部署于 GitHub Pages · <a href="https://tasklist.cxaqhq.cn">tasklist.cxaqhq.cn</a></p>
+        <p>纯静态页面，无后端、无跟踪、无第三方依赖；所有数据均在浏览器本地处理。</p>
+      </div>
+      <div class="lang-en">
+        <p class="warn">⚠️ For authorized security testing, asset inventory and incident response only. Ensure you have explicit permission for the target system and comply with applicable laws.</p>
+        <p>TaskList Inspector · <a href="https://github.com/badboycxcc/Tasklist" target="_blank" rel="noopener noreferrer">GitHub</a> · deployed on GitHub Pages · <a href="https://tasklist.cxaqhq.cn">tasklist.cxaqhq.cn</a></p>
+        <p>Pure static page: no backend, no tracking, no third-party dependencies. All data is processed locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast"></div>
+
+  <script src="assets/js/signatures.js"></script>
+  <script src="assets/js/signatures.en.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/samples.js"></script>
+  <script src="assets/js/parser.js"></script>
+  <script src="assets/js/analyzer.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

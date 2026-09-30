@@ -176,11 +176,11 @@ top -bn1                          # 非交互式 top 输出</pre>
         </details>
         <details>
           <summary>NetExec / CrackMapExec · 直接粘贴日志即可</summary>
-          <pre>nxc smb 192.168.9.0/24 -u user -p pass -x "tasklist"
+          <pre>nxc smb 192.168.1.0/24 -u user -p pass -x "tasklist"
 # 或 atexec / wmiexec 等执行 tasklist 后, 直接粘贴带前缀的输出
 
-SMB   192.168.9.92   445   AS-PC   Image Name    PID  Session Name ...
-SMB   192.168.9.92   445   AS-PC   svchost.exe   804  Services   0 ...
+SMB   192.168.1.10   445   PC-01   Image Name    PID  Session Name ...
+SMB   192.168.1.10   445   PC-01   svchost.exe   804  Services   0 ...
 # ↑ 工具会自动剥离 [协议 IP 端口 主机名] 前缀, 并丢弃 [+] 类状态行</pre>
         </details>
         <details>
@@ -210,11 +210,11 @@ top -bn1                          # non-interactive top output</pre>
         </details>
         <details>
           <summary>NetExec / CrackMapExec · paste the log directly</summary>
-          <pre>nxc smb 192.168.9.0/24 -u user -p pass -x "tasklist"
+          <pre>nxc smb 192.168.1.0/24 -u user -p pass -x "tasklist"
 # or capture tasklist via atexec / wmiexec and paste the prefixed output
 
-SMB   192.168.9.92   445   AS-PC   Image Name    PID  Session Name ...
-SMB   192.168.9.92   445   AS-PC   svchost.exe   804  Services   0 ...
+SMB   192.168.1.10   445   PC-01   Image Name    PID  Session Name ...
+SMB   192.168.1.10   445   PC-01   svchost.exe   804  Services   0 ...
 # The [protocol ip port host] prefix is stripped automatically; [+] status lines are dropped</pre>
         </details>
         <details>

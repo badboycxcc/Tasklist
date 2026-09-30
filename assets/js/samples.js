@@ -67,22 +67,22 @@
       "root      7004  0.0  0.2  91204  8876 ?        Ssl  Aug12   0:06 /opt/agent/corp-mon-agent --daemon"
     ].join("\n"),
 
-    /* NetExec / CrackMapExec 带日志前缀的输出(脏数据) */
+    /* NetExec / CrackMapExec 带日志前缀的输出(脏数据, 示例) */
     netexec: [
-      "SMB         192.168.9.92    445    AS-PC            [+] Executed command via atexec",
-      "SMB         192.168.9.92    445    AS-PC            Image Name                     PID Session Name        Session#    Mem Usage",
-      "SMB         192.168.9.92    445    AS-PC            ========================= ======== ================ =========== ============",
-      "SMB         192.168.9.92    445    AS-PC            System Idle Process              0 Services                   0         24 K",
-      "SMB         192.168.9.92    445    AS-PC            System                           4 Services                   0      2,296 K",
-      "SMB         192.168.9.92    445    AS-PC            smss.exe                       316 Services                   0      1,196 K",
-      "SMB         192.168.9.92    445    AS-PC            lsass.exe                      704 Services                   0     12,396 K",
-      "SMB         192.168.9.92    445    AS-PC            svchost.exe                    804 Services                   0     10,912 K",
-      "SMB         192.168.9.92    445    AS-PC            ekrn.exe                       868 Services                   0    128,392 K",
-      "SMB         192.168.9.92    445    AS-PC            vmtools.exe                   2364 Services                   0     11,984 K",
-      "SMB         192.168.9.92    445    AS-PC            cmd.exe                       4208 Services                   0      2,624 K",
-      "SMB         192.168.9.92    445    AS-PC            conhost.exe                   3048 Services                   0      2,908 K",
-      "SMB         192.168.9.92    445    AS-PC            chrome.exe                    6512 Console                    1     27,804 K",
-      "SMB         192.168.9.92    445    AS-PC            tasklist.exe                  6124 Services                   0      5,604 K"
+      "SMB         192.168.1.10    445    PC-01            [+] Executed command via atexec",
+      "SMB         192.168.1.10    445    PC-01            Image Name                     PID Session Name        Session#    Mem Usage",
+      "SMB         192.168.1.10    445    PC-01            ========================= ======== ================ =========== ============",
+      "SMB         192.168.1.10    445    PC-01            System Idle Process              0 Services                   0         24 K",
+      "SMB         192.168.1.10    445    PC-01            System                           4 Services                   0      2,296 K",
+      "SMB         192.168.1.10    445    PC-01            smss.exe                       316 Services                   0      1,196 K",
+      "SMB         192.168.1.10    445    PC-01            lsass.exe                      704 Services                   0     12,396 K",
+      "SMB         192.168.1.10    445    PC-01            svchost.exe                    804 Services                   0     10,912 K",
+      "SMB         192.168.1.10    445    PC-01            ekrn.exe                       868 Services                   0    128,392 K",
+      "SMB         192.168.1.10    445    PC-01            vmtools.exe                   2364 Services                   0     11,984 K",
+      "SMB         192.168.1.10    445    PC-01            cmd.exe                       4208 Services                   0      2,624 K",
+      "SMB         192.168.1.10    445    PC-01            conhost.exe                   3048 Services                   0      2,908 K",
+      "SMB         192.168.1.10    445    PC-01            chrome.exe                    6512 Console                    1     27,804 K",
+      "SMB         192.168.1.10    445    PC-01            tasklist.exe                  6124 Services                   0      5,604 K"
     ].join("\n")
   };
 

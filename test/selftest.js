@@ -120,7 +120,7 @@ assert(nxcParsed.platform === "w", "nxc 输出平台识别为 w");
 assert(nxcParsed.mode === "win-table", "清洗后格式识别为 win-table (实际: " + nxcParsed.mode + ")");
 assert(nxcParsed.notes.length >= 1, "返回脏数据清洗提示");
 assert(nxcParsed.entries.length === 11, "清洗后解析出 11 条 (实际: " + nxcParsed.entries.length + ")");
-assert(nxcParsed.entries.every(function (e) { return e.raw.indexOf("AS-PC") === -1; }), "进程名中不含主机名前缀");
+assert(nxcParsed.entries.every(function (e) { return e.raw.indexOf("PC-01") === -1; }), "进程名中不含主机名前缀");
 assert(nxcParsed.entries.some(function (e) { return e.raw === "System Idle Process"; }), "含空格的进程名正确解析");
 var nxcRes = A.analyze(nxcParsed);
 assert(nxcRes.notes.length >= 1, "分析结果携带清洗提示");

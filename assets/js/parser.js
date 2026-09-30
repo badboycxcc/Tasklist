@@ -96,7 +96,7 @@
 
   /* ---------- 去除 NetExec / CrackMapExec 等工具的输出前缀 ----------
    * 这类工具输出形如:
-   *   SMB  192.168.9.92  445  AS-PC  System Idle Process  0 Services  0  24 K
+   *   SMB  192.168.1.10  445  PC-01  System Idle Process  0 Services  0  24 K
    * 每行包含 [协议 IP 端口 主机名] 前缀, 且主机名与内容之间用多空格分隔,
    * 而 tasklist 数据行内部只有单空格, 据此可安全剥离子进程实际内容。
    */

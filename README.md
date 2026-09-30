@@ -44,7 +44,7 @@ node test/selftest.js
 
 仓库地址：<https://github.com/badboycxcc/Tasklist>
 
-> 提示：本目录目前嵌套在本地的大仓库 `Code/Code` 内；为了独立发布，建议把 `tasklist` 目录单独初始化为一个 Git 仓库推送，不要提交到大仓库里。
+> 提示：首次发布时按以下步骤推送即可；建议将本项目作为独立仓库维护。
 
 ### 1. 推送代码
 

@@ -124,7 +124,19 @@ tasklist/
 - 英文翻译：在 `assets/js/signatures.en.js` 中补一条 `"类别|名称": "英文描述"`；
   若中文名称本身需要英文化，用 `{ name: "English Name", desc: "..." }`；缺失时会回退显示中文描述
 
-## 🇬🇧 English
+## � 宣传素材
+
+图标与分享卡片素材位于 `assets/`，可直接引用线上地址（如 `https://tasklist.cxaqhq.cn/assets/icon-512.png`）：
+
+| 文件 | 用途 |
+| --- | --- |
+| `assets/icon-1024.png` / `assets/icon-512.png` | 站点图标 / 平台头像（高清） |
+| `assets/icon-256.png` / `icon-128.png` / `icon-64.png` | 列表图标、小尺寸场景 |
+| `assets/icon-square-512.png` | 全出血方形版（平台裁剪为圆形头像时用） |
+| `assets/og-image.png` | 链接分享卡片（1200×630） |
+| `assets/icon.svg` / `icon-square.svg` / `og-image.svg` | 矢量母版（可自行改色、放缩） |
+
+## �🇬🇧 English
 
 **TaskList Inspector** is a pure client-side web tool that analyzes process lists (`tasklist` / `ps aux` / `ps -ef` / `top` / NetExec logs) to identify software running on Windows & Linux hosts — built for pentest recon, asset inventory and incident response. The UI is bilingual (中文 / English) — switch it in the top-right corner.
 

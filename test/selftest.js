@@ -127,8 +127,58 @@ assert(nxcRes.notes.length >= 1, "分析结果携带清洗提示");
 assert(nxcRes.findings.av.some(function (f) { return f.name === "ESET"; }), "识别出 ESET (ekrn.exe)");
 assert(nxcRes.findings.vm.some(function (f) { return f.name === "VMware Tools"; }), "识别出 VMware Tools (vmtools.exe)");
 
+/* 6b. 常见厂商组件识别 (Cortex XDR / SQL Server / Windows 内置) */
+console.log("\n== 常见组件识别 ==");
+var compNames = [
+  "cyserver.exe", "cytray.exe", "cyuserserver.exe", "cysandbox.exe", "tlaworker.exe",
+  "cortex-xdr-payload.exe", "xdrhealth.exe",
+  "sqlceip.exe", "sqlwriter.exe", "MsDtsSrvr.exe", "msmdsrv.exe", "fdlauncher.exe",
+  "fdhost.exe", "Launchpad.exe", "mpdwsvc.exe",
+  "LogonUI.exe", "msdtc.exe", "TabTip.exe", "TabTip32.exe", "mmc.exe", "vds.exe",
+  "AggregatorHost.exe", "ServerManager.exe", "glpi-agent.exe"
+];
+var compLines = [
+  "映像名称                       PID 会话名              会话#       内存使用",
+  "========================= ======== ================ =========== ============"
+];
+compNames.forEach(function (n, i) {
+  compLines.push((n + "                              ").slice(0, 30) + " " + (2000 + i) + " Services                   0      1,000 K");
+});
+var compRes = A.analyze(P.parse(compLines.join("\n"), "w"));
+assert(compRes.unresolved.length === 0, "补充签名后无未识别进程 (实际未识别: " + compRes.unresolved.length + ")");
+assert(!!compRes.findings.av && compRes.findings.av.some(function (f) { return f.name.indexOf("Cortex XDR") !== -1; }), "识别出 Palo Alto Cortex XDR 组件");
+assert(!!compRes.findings.db && compRes.findings.db.some(function (f) { return f.name.indexOf("Integration Services") !== -1; }), "识别出 SQL Server SSIS (MsDtsSrvr)");
+assert(compRes.findings.db.some(function (f) { return f.name.indexOf("Analysis Services") !== -1; }), "识别出 SQL Server SSAS (msmdsrv)");
+assert(compRes.findings.db.some(function (f) { return f.name.indexOf("PolyBase") !== -1; }), "识别出 SQL Server PolyBase (mpdwsvc)");
+assert(compRes.findings.db.some(function (f) { return f.name.indexOf("全文搜索") !== -1; }), "识别出 SQL Server 全文搜索 (fdhost/fdlauncher)");
+assert(compRes.findings.db.some(function (f) { return f.name.indexOf("Launchpad") !== -1; }), "识别出 SQL Server Launchpad");
+assert(!!compRes.findings.system && compRes.findings.system.some(function (f) { return f.name.indexOf("LogonUI") !== -1; }), "识别出 Windows 登录界面 (LogonUI)");
+assert(compRes.findings.system.some(function (f) { return f.name.indexOf("MSDTC") !== -1; }), "识别出 MSDTC 分布式事务协调器");
+assert(!!compRes.findings.ops && compRes.findings.ops.some(function (f) { return f.name === "GLPI Agent"; }), "识别出 GLPI Agent");
+
+/* 6c. NetExec 透传 tasklist 时列被截断 (<名称> <PID> N/A) */
+console.log("\n== NetExec 截断列格式 ==");
+var nxcTrunc = [
+  "SMB         192.168.2.21    445    WIN-A4ACHKSDJN2  Image Name                     PID Services",
+  "SMB         192.168.2.21    445    WIN-A4ACHKSDJN2  ========================= ======== ============================================",
+  "SMB         192.168.2.21    445    WIN-A4ACHKSDJN2  System Idle Process              0 N/A",
+  "SMB         192.168.2.21    445    WIN-A4ACHKSDJN2  lsass.exe                      704 N/A",
+  "SMB         192.168.2.21    445    WIN-A4ACHKSDJN2  cyserver.exe                  1240 N/A",
+  "SMB         192.168.2.21    445    WIN-A4ACHKSDJN2  glpi-agent.exe                1332 N/A"
+].join("\n");
+var nxcTruncParsed = P.parse(nxcTrunc, null);
+assert(nxcTruncParsed.mode === "win-table", "截断列格式识别为 win-table (实际: " + nxcTruncParsed.mode + ")");
+assert(nxcTruncParsed.entries.length === 4, "截断列格式解析出 4 条 (实际: " + nxcTruncParsed.entries.length + ")");
+assert(nxcTruncParsed.entries.every(function (e) { return e.raw.indexOf("WIN-A4ACHKSDJN2") === -1; }), "进程名不含主机名前缀");
+assert(nxcTruncParsed.entries.every(function (e) { return e.raw !== "A" && e.raw.toUpperCase() !== "N/A"; }), "N/A 未误判为进程名 A");
+var nxcTruncRes = A.analyze(nxcTruncParsed);
+assert(nxcTruncRes.unresolved.length === 0, "截断列格式无未识别进程 (实际: " + nxcTruncRes.unresolved.length + ")");
+assert(nxcTruncRes.findings.av.some(function (f) { return f.name.indexOf("Cortex XDR") !== -1; }), "截断列格式识别出 Cortex XDR");
+assert(nxcTruncRes.findings.ops.some(function (f) { return f.name === "GLPI Agent"; }), "截断列格式识别出 GLPI Agent");
+
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");
+assert(P.cleanName("N/A") === "", "N/A 占位符被清洗为空 (不产生伪进程 A)");
 var ev = A.editDistance("scvhost", "svchost");
 assert(ev === 1, "Damerau-Levenshtein 识别换位 (scvhost ↔ svchost = 1)");
 var t1 = A.analyze(P.parse("C:\\Users\\Public\\svchost.exe --x\nsvchost.exe", "w"));

@@ -29,6 +29,7 @@
   function cleanName(raw) {
     var s = String(raw == null ? "" : raw).trim();
     s = s.replace(/^["'`]+/, "").replace(/["'`]+$/, "").trim();
+    if (/^n\s*\/\s*a$/i.test(s)) return "";              // 占位符 N/A 不是进程名
     // 内核线程形式 [kworker/0:1]
     var km = s.match(/^\[([^\]]+)\]$/);
     if (km) {
@@ -87,7 +88,7 @@
     if (/映像名称\s*[:：]\s*\S|Image Name\s*:\s*\S/i.test(text)) return "win-list";
     if (/^\s*"[^"]+","\d+"/m.test(text)) return "win-csv";
     if (/ProcessName/.test(text) && /Handles/.test(text)) return "win-ps";
-    if (/映像名称|Image Name/i.test(text) && /(内存使用|Mem Usage)/i.test(text)) return "win-table";
+    if (/映像名称|Image Name/i.test(text) && /(内存使用|Mem Usage|\bPID\b)/i.test(text)) return "win-table";
     if (/COMMAND/.test(text) && /\bRES\b/.test(text) && /%CPU/.test(text)) return "nix-top";
     if (/USER\s+PID\s+%CPU|%CPU\s+%MEM\s+VSZ/.test(text)) return "nix-aux";
     if (/UID\s+PID\s+PPID|PID\s+PPID\s+C\s+STIME/.test(text)) return "nix-ef";
@@ -140,6 +141,7 @@
     if (/^\s*=+(\s+=+)+\s*$/.test(s)) return 3;
     if (/(映像名称|Image Name)/i.test(s) && /\bPID\b/.test(s)) return 3;
     if (WIN_ROW_RE.test(s)) return 3;
+    if (WIN_ROW_NA_RE.test(s)) return 3;
     if (/(内存使用|Mem Usage)/i.test(s)) return 1;
     return 0;
   }
@@ -147,6 +149,8 @@
   /* ---------- 各格式解析器 ---------- */
 
   var WIN_ROW_RE = /^\s*(.+?)\s+([\d,]+)\s+(\S+)\s+(-?\d+)\s+([\d,\.]+|N\/A)\s*([KMGTP]?B?)\s*$/i;
+  /* NetExec 等工具透传 tasklist 时列被截断: "<名称> <PID> [<会话>] N/A" */
+  var WIN_ROW_NA_RE = /^\s*(.+?)\s+([\d,]+)\s+(.*?)\s*N\s*\/\s*A\s*$/i;
 
   function parseWinTable(lines) {
     var out = [];
@@ -161,6 +165,17 @@
           pid: m[2].replace(/,/g, ""),
           session: m[3],
           mem: (m[5] === "N/A" ? "" : (m[5] + " " + m[6]).trim()),
+          cmd: null
+        });
+        continue;
+      }
+      var mn = line.match(WIN_ROW_NA_RE);
+      if (mn) {
+        out.push({
+          raw: mn[1].trim(),
+          pid: mn[2].replace(/,/g, ""),
+          session: (mn[3] || "").trim() || null,
+          mem: null,
           cmd: null
         });
       }

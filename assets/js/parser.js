@@ -142,6 +142,7 @@
     if (/(映像名称|Image Name)/i.test(s) && /\bPID\b/.test(s)) return 3;
     if (WIN_ROW_RE.test(s)) return 3;
     if (WIN_ROW_NA_RE.test(s)) return 3;
+    if (WIN_SVC_ROW_RE.test(s)) return 3;
     if (/(内存使用|Mem Usage)/i.test(s)) return 1;
     return 0;
   }
@@ -151,6 +152,8 @@
   var WIN_ROW_RE = /^\s*(.+?)\s+([\d,]+)\s+(\S+)\s+(-?\d+)\s+([\d,\.]+|N\/A)\s*([KMGTP]?B?)\s*$/i;
   /* NetExec 等工具透传 tasklist 时列被截断: "<名称> <PID> [<会话>] N/A" */
   var WIN_ROW_NA_RE = /^\s*(.+?)\s+([\d,]+)\s+(.*?)\s*N\s*\/\s*A\s*$/i;
+  /* tasklist /svc: "<名称> <PID> <服务列表>"(服务列非 N/A 时) */
+  var WIN_SVC_ROW_RE = /^\s*(.+?)\s+([\d,]+)\s+([A-Za-z][A-Za-z0-9_.+-]*(?:\s*,\s*[A-Za-z][A-Za-z0-9_.+-]*)*)\s*$/;
 
   function parseWinTable(lines) {
     var out = [];
@@ -178,6 +181,12 @@
           mem: null,
           cmd: null
         });
+        continue;
+      }
+      // tasklist /svc: 第三列是服务列表(<name> <PID> <services>); 服务名不是进程, 只取名称与 PID
+      var ms = line.match(WIN_SVC_ROW_RE);
+      if (ms) {
+        out.push({ raw: ms[1].trim(), pid: ms[2].replace(/,/g, ""), session: null, mem: null, cmd: null });
       }
     }
     return out;

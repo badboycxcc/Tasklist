@@ -76,6 +76,10 @@
     { match: ["avgnt", "avguard"], name: "Avira", vendor: "Avira", cat: "av", os: "w", desc: "小红伞杀毒软件" },
     { match: ["ccsvchst", "rtvscan", "smc"], name: "Symantec / Norton", vendor: "Broadcom", cat: "av", os: "w", desc: "赛门铁克(Symantec Endpoint / Norton)" },
     { match: ["mcshield", "mfemms", "masvc", "mfevtps"], name: "McAfee / Trellix", vendor: "Trellix", cat: "av", os: "w", desc: "McAfee/Trellix 终端防护组件" },
+    { match: ["mfeesp", "mfefw", "mfehcs", "mfeatp", "mfetp", "mfeensppl", "mfemactl", "mfeconsole"], name: "McAfee/Trellix Endpoint Security (ENS)", vendor: "Trellix", cat: "av", os: "w", desc: "ENS 端点安全平台/防火墙/威胁防御/自适应威胁防护组件" },
+    { match: ["macmnsvc", "macompatsvc", "mctray", "updaterui"], name: "McAfee/Trellix Agent", vendor: "Trellix", cat: "av", os: "w", desc: "McAfee/Trellix Agent 代理(Common Services/兼容服务/托盘/AutoUpdate)" },
+    { match: ["fcag", "fcags", "fcagswd", "fcom", "fcnm", "dlpsensor", "edpa"], name: "McAfee/Trellix DLP / 移动介质保护", vendor: "Trellix", cat: "av", os: "w", desc: "数据防泄漏(FRP/DLP)端点组件(文件与移动介质保护)" },
+    { match: ["auditmanagerservice", "enginemain", "fimcli"], name: "McAfee/Trellix Policy Auditor / 应用控制", vendor: "Trellix", cat: "av", os: "w", desc: "合规审计/应用控制(Solidcore)代理" },
     { match: ["ntrtscan", "tmlisten", "coreserviceshell", "tmccsf"], name: "Trend Micro", vendor: "趋势科技", cat: "av", os: "w", desc: "趋势科技 OfficeScan / Apex One" },
     { match: ["savservice", "hmpalert"], name: "Sophos", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos 终端防护(含 HitmanPro.Alert)" },
     { match: ["psanhost"], name: "Panda Security", vendor: "WatchGuard", cat: "av", os: "w", desc: "熊猫安全 终端防护" },
@@ -125,6 +129,8 @@
     { match: ["winvnc", "tvnserver", "uvnc_service", "vncserver"], name: "VNC Server", vendor: "RealVNC/TightVNC/UltraVNC", cat: "remote", os: "b", desc: "VNC 远程桌面服务端" },
     { match: ["wfica32"], name: "Citrix Workspace", vendor: "Citrix", cat: "remote", os: "w", desc: "Citrix 虚拟桌面/应用客户端(VDI 环境线索)" },
     { match: ["xrdp"], prefix: true, name: "xrdp", vendor: "xrdp", cat: "remote", os: "l", desc: "Linux 下的 RDP 服务端" },
+    { match: ["dwrcs"], name: "SolarWinds DameWare 远程控制服务", vendor: "SolarWinds", cat: "remote", os: "w", desc: "DameWare Mini Remote Control 服务端(DWRCS, 远程控制入口)" },
+    { match: ["cmrcservice"], name: "SCCM 远程控制服务", vendor: "Microsoft", cat: "remote", os: "w", desc: "ConfigMgr(SCCM) 远程控制服务(CmRcService, 企业统一管理/远程协助)" },
 
     /* ---------- 隧道 / 代理 ---------- */
     { match: ["frpc", "frps", "frpmgr"], name: "frp", vendor: "fatedier", cat: "tunnel", os: "b", desc: "内网穿透/反向代理工具(需确认用途)" },
@@ -180,6 +186,8 @@
     /* ---------- Web 服务 ---------- */
     { match: ["w3wp"], name: "IIS 工作进程", vendor: "Microsoft", cat: "web", os: "w", desc: "IIS 应用池工作进程(Web 站点运行中)" },
     { match: ["iisexpress"], name: "IIS Express", vendor: "Microsoft", cat: "web", os: "w", desc: "IIS Express 开发服务器" },
+    { match: ["wmsvc"], name: "IIS Web 管理服务", vendor: "Microsoft", cat: "web", os: "w", desc: "IIS 远程管理服务(WMSvc, 存在 IIS 站点管理入口)" },
+    { match: ["inetinfo"], name: "IIS Admin Service", vendor: "Microsoft", cat: "web", os: "w", desc: "IIS 管理服务宿主(inetinfo, 存在 IIS)" },
     { match: ["nginx"], prefix: true, name: "Nginx", vendor: "Nginx", cat: "web", os: "b", desc: "Nginx Web/反向代理服务" },
     { match: ["httpd"], name: "Apache HTTP Server", vendor: "Apache", cat: "web", os: "b", desc: "Apache Web 服务" },
     { match: ["apache2"], name: "Apache HTTP Server", vendor: "Apache", cat: "web", os: "l", desc: "Apache2 Web 服务" },
@@ -204,6 +212,7 @@
     { match: ["perl"], prefix: true, name: "Perl", vendor: "Perl", cat: "midware", os: "b", desc: "Perl 运行时(常见于系统脚本)" },
     { match: ["ruby"], prefix: true, name: "Ruby", vendor: "Ruby", cat: "midware", os: "b", desc: "Ruby 运行时" },
     { match: ["dotnet"], prefix: true, name: ".NET 运行时", vendor: "Microsoft", cat: "midware", os: "b", desc: ".NET 应用宿主" },
+    { match: ["smsvchost"], name: "WCF 服务激活宿主 (SMSvcHost)", vendor: "Microsoft", cat: "midware", os: "w", desc: "WCF Net.Tcp 端口共享/监听适配器宿主(依赖 .NET)" },
     { match: ["beam.smp"], name: "Erlang VM", vendor: "Erlang", cat: "midware", os: "l", desc: "Erlang 虚拟机(RabbitMQ/EMQX 等)" },
     { match: ["rabbitmq"], prefix: true, name: "RabbitMQ", vendor: "Broadcom", cat: "midware", os: "b", desc: "消息队列服务" },
     { match: ["kafka"], prefix: true, name: "Apache Kafka", vendor: "Apache", cat: "midware", os: "b", desc: "消息队列/流处理平台" },
@@ -222,7 +231,7 @@
     { match: ["cilium"], prefix: true, name: "Cilium", vendor: "Isovalent", cat: "container", os: "l", desc: "K8s 网络/安全组件" },
 
     /* ---------- 虚拟化 ---------- */
-    { match: ["vmtoolsd", "vmware-user-suid-wrapper", "vmtools"], name: "VMware Tools", vendor: "VMware", cat: "vm", os: "b", desc: "VMware 工具(当前系统疑似运行在 VMware 虚拟机中)" },
+    { match: ["vmtoolsd", "vmware-user-suid-wrapper", "vmtools", "vm3dservice", "vgauthservice", "vmwaretray", "vmwareuser"], name: "VMware Tools", vendor: "VMware", cat: "vm", os: "b", desc: "VMware 工具及组件(vmtoolsd/vm3dservice/VGAuthService 等)" },
     { match: ["vmware-vmx"], name: "VMware Workstation 虚拟机进程", vendor: "VMware", cat: "vm", os: "w", desc: "本机正在以宿主机身份运行 VMware 虚拟机" },
     { match: ["vmware"], prefix: false, name: "VMware Workstation", vendor: "VMware", cat: "vm", os: "w", desc: "VMware 虚拟化软件界面" },
     { match: ["vboxservice", "vboxsvc", "virtualboxvm"], name: "VirtualBox", vendor: "Oracle", cat: "vm", os: "b", desc: "VirtualBox 相关组件(宿主或虚拟机内)" },
@@ -304,6 +313,9 @@
     { match: ["mobaxterm"], prefix: true, name: "MobaXterm", vendor: "Mobatek", cat: "sysutil", os: "w", desc: "全能终端工具(含 SSH/X 转发)" },
     { match: ["alibabaprotect"], name: "阿里系列保护服务", vendor: "阿里巴巴", cat: "sysutil", os: "w", desc: "阿里软件附带的常驻保护服务" },
     { match: ["sgtool", "sogoucloud", "pinyinup"], name: "搜狗输入法", vendor: "搜狗", cat: "sysutil", os: "w", desc: "搜狗输入法组件" },
+    { match: ["notepad"], name: "记事本", vendor: "Microsoft", cat: "sysutil", os: "w", desc: "Windows 记事本" },
+    { match: ["snippingtool"], name: "截图工具", vendor: "Microsoft", cat: "sysutil", os: "w", desc: "Windows 截图工具(有人正在截图)" },
+    { match: ["acevents"], name: "HID ActivClient (智能卡中间件)", vendor: "HID Global", cat: "sysutil", os: "w", desc: "ActivIdentity/HID ActivClient 事件服务(存在智能卡/USB Key 登录)" },
 
     /* ---------- 办公软件 ---------- */
     { match: ["winword", "excel", "powerpnt", "outlook", "onenote", "msaccess"], name: "Microsoft Office", vendor: "Microsoft", cat: "office", os: "w", desc: "Office 组件(Word/Excel/PPT/Outlook 等)" },
@@ -388,6 +400,10 @@
     { match: ["vds"], name: "vds.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "虚拟磁盘服务(磁盘/卷管理)" },
     { match: ["aggregatorhost"], name: "AggregatorHost.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 诊断遥测聚合宿主(DiagTrack/UTC 相关)" },
     { match: ["servermanager"], name: "Windows Server Manager", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 服务器管理器(服务器操作系统线索)" },
+    { match: ["wmiapssrv", "wmiapsrv"], name: "WMI 性能适配器", vendor: "Microsoft", cat: "system", os: "w", desc: "WMI Performance Adapter 服务" },
+    { match: ["lockapphost"], name: "LockAppHost.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 锁屏界面宿主" },
+    { match: ["searchui"], name: "Windows 搜索 UI", vendor: "Microsoft", cat: "system", os: "w", desc: "Cortana/搜索界面进程(Win11 为 SearchHost)" },
+    { match: ["plugplay", "iphlpsvc", "scpolicysvc", "shellhwdetection", "winmgmt", "trkwks", "licensemanager", "remoteregistry", "winhttpautoproxysvc", "timebrokersvc", "nettcpportsharing"], name: "Windows 系统服务(服务名)", vendor: "Microsoft", cat: "system", os: "w", desc: "svchost.exe 托管的 Windows 服务名(常见于 tasklist /svc 输出的服务列)" },
 
     /* ---------- Windows 命令行 / 脚本宿主 ---------- */
     { match: ["cmd"], name: "cmd.exe", vendor: "Microsoft", cat: "shell", os: "w", desc: "命令提示符(存在命令行会话)" },
@@ -426,6 +442,9 @@
 
     /* ---------- Linux 网络基础服务 ---------- */
     { match: ["networkmanager"], name: "NetworkManager", vendor: "GNOME", cat: "infra", os: "l", desc: "网络管理服务" },
+    { match: ["clussvc"], name: "Windows 故障转移群集服务", vendor: "Microsoft", cat: "infra", os: "w", desc: "Failover Clustering 群集服务(高可用/AlwaysOn 节点)" },
+    { match: ["rhs"], name: "群集资源宿主 (RHS)", vendor: "Microsoft", cat: "infra", os: "w", desc: "Failover Cluster Resource Hosting Subsystem(群集资源宿主)" },
+    { match: ["mqsvc"], name: "Microsoft 消息队列 (MSMQ)", vendor: "Microsoft", cat: "infra", os: "w", desc: "MSMQ 消息队列服务" },
     { match: ["wpa_supplicant"], name: "wpa_supplicant", vendor: "w1.fi", cat: "infra", os: "l", desc: "无线网络认证(存在 WiFi 连接)" },
     { match: ["dhclient"], name: "dhclient", vendor: "ISC", cat: "infra", os: "l", desc: "DHCP 客户端" },
     { match: ["dhcpd"], name: "DHCP Server", vendor: "ISC", cat: "infra", os: "l", desc: "DHCP 服务端(本机可能是网关/路由器)" },
@@ -484,6 +503,13 @@
     { match: ["dovecot"], prefix: true, name: "Dovecot", vendor: "Dovecot", cat: "mail", os: "l", desc: "IMAP/POP3 邮件服务" },
     { match: ["exim"], prefix: true, name: "Exim", vendor: "Exim", cat: "mail", os: "l", desc: "邮件传输代理(MTA)" },
     { match: ["qmgr", "pickup", "postdrop"], name: "Postfix", vendor: "Postfix", cat: "mail", os: "l", desc: "邮件传输代理(MTA)组件" },
+    { match: ["microsoft.exchange", "msexchange"], prefix: true, name: "Microsoft Exchange Server", vendor: "Microsoft", cat: "mail", os: "w", desc: "Exchange 服务器角色/服务进程(邮件系统)" },
+    { match: ["msexchangerepl"], name: "Exchange 邮箱数据库复制 (DAG)", vendor: "Microsoft", cat: "mail", os: "w", desc: "MSExchangeRepl 邮箱数据库复制服务(存在 DAG)" },
+    { match: ["edgetransport"], name: "Exchange Transport 工作进程", vendor: "Microsoft", cat: "mail", os: "w", desc: "Exchange 传输服务工作进程(SMTP/邮件流)" },
+    { match: ["umservice", "umworkerprocess"], name: "Exchange 统一消息 (UM)", vendor: "Microsoft", cat: "mail", os: "w", desc: "Exchange 统一消息服务/工作进程(语音邮件)" },
+    { match: ["noderunner", "parserserver", "hostcontrollerservice"], name: "Exchange/SharePoint 搜索组件", vendor: "Microsoft", cat: "mail", os: "w", desc: "搜索节点/解析/宿主控制器(Exchange FastSearch 或 SharePoint Search)" },
+    { match: ["scanningprocess", "fms"], name: "Exchange FIP-FS 内容扫描", vendor: "Microsoft", cat: "mail", os: "w", desc: "Exchange 恶意软件/内容扫描组件(scanningprocess/fms; scanningprocess 亦见于杀软)" },
+    { match: ["complianceauditservice"], prefix: true, name: "Exchange 合规审计服务", vendor: "Microsoft", cat: "mail", os: "w", desc: "Exchange Compliance Audit 服务(MSComplianceAudit)" },
 
     /* ---------- Linux 云厂商组件 ---------- */
     { match: ["aliyundun", "aliyundunupdate"], prefix: true, name: "阿里云盾 Agent", vendor: "阿里云", cat: "cloud", os: "l", desc: "阿里云安全中心客户端(云主机线索)" },
@@ -509,6 +535,7 @@
     { match: ["ccmexec"], name: "SCCM 管理代理", vendor: "Microsoft", cat: "ops", os: "w", desc: "Microsoft SCCM/ConfigMgr 客户端代理(企业统一管理线索)" },
     { match: ["osqueryd", "osquery"], name: "osquery", vendor: "Meta", cat: "ops", os: "b", desc: "SQL 化系统信息采集(常见于安全监控)" },
     { match: ["glpi-agent", "fusioninventory-agent"], prefix: true, name: "GLPI Agent", vendor: "Teclib", cat: "ops", os: "b", desc: "GLPI 资产盘点代理(软硬件清单采集, 原 FusionInventory)" },
+    { match: ["nxlog"], name: "NXLog", vendor: "NXLog", cat: "ops", os: "b", desc: "日志采集/转发代理" },
     { match: ["supervisord", "supervisor"], prefix: true, name: "Supervisor", vendor: "Supervisor", cat: "ops", os: "l", desc: "进程守护管理(常管理各类业务进程)" },
     { match: ["monit"], name: "Monit", vendor: "mmonit", cat: "ops", os: "l", desc: "进程/资源监控守护" },
     { match: ["pm2"], prefix: true, name: "PM2", vendor: "Keymetrics", cat: "ops", os: "b", desc: "Node.js 进程管理器" },
@@ -560,7 +587,8 @@
     { match: ["microsoftedgeupdate"], prefix: true, name: "Edge 更新组件", vendor: "Microsoft", cat: "update", os: "w", desc: "Edge 更新程序" },
     { match: ["jusched"], name: "Java 更新程序", vendor: "Oracle", cat: "update", os: "w", desc: "Java 自动更新" },
     { match: ["trustedinstaller"], name: "TrustedInstaller", vendor: "Microsoft", cat: "update", os: "w", desc: "Windows 模块安装服务(系统更新中)" },
-    { match: ["unsecapp"], name: "unsecapp.exe", vendor: "Microsoft", cat: "update", os: "w", desc: "WMI 事件接收进程" }
+    { match: ["unsecapp"], name: "unsecapp.exe", vendor: "Microsoft", cat: "update", os: "w", desc: "WMI 事件接收进程" },
+    { match: ["updateservice"], name: "UpdateService (通用更新服务)", vendor: "通用", cat: "update", os: "w", desc: "通用更新服务名(常见于 Exchange FIP-FS 内容扫描; 亦见于其他厂商), 建议按路径与签名确认" }
   ];
 
   /* ========== 命令行关键字签名 ==========

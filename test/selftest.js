@@ -176,6 +176,60 @@ assert(nxcTruncRes.unresolved.length === 0, "截断列格式无未识别进程 (
 assert(nxcTruncRes.findings.av.some(function (f) { return f.name.indexOf("Cortex XDR") !== -1; }), "截断列格式识别出 Cortex XDR");
 assert(nxcTruncRes.findings.ops.some(function (f) { return f.name === "GLPI Agent"; }), "截断列格式识别出 GLPI Agent");
 
+/* 6d. 企业环境组件 (McAfee/Trellix、DameWare、VMware、Exchange 等) */
+console.log("\n== 企业环境组件识别 ==");
+var entNames = [
+  "mfeesp.exe", "mfefw.exe", "mfehcs.exe", "mfeatp.exe", "mfetp.exe", "mfemactl.exe", "MFEConsole.exe",
+  "macmnsvc.exe", "macompatsvc.exe", "mctray.exe", "UpdaterUI.exe",
+  "fcag.exe", "fcags.exe", "fcagswd.exe", "fcom.exe", "AuditManagerService.exe",
+  "DWRCS.EXE", "CmRcService.exe", "vm3dservice.exe", "VGAuthService.exe",
+  "inetinfo.exe", "WMSvc.exe", "mqsvc.exe", "clussvc.exe", "rhs.exe", "SMSvcHost.exe",
+  "WmiApSrv.exe", "nxlog.exe", "acevents.exe", "notepad.exe", "SnippingTool.exe",
+  "SearchUI.exe", "LockAppHost.exe", "updateservice.exe",
+  "MSExchangeTransport.exe", "EdgeTransport.exe", "umservice.exe", "msexchangerepl.exe",
+  "scanningprocess.exe", "noderunner.exe", "ParserServer.exe", "hostcontrollerservice.exe",
+  "fms.exe", "ComplianceAuditService.ex",
+  "Microsoft.Exchange.Diagno", "MSExchangeMailboxAssistan"
+];
+var entLines = [
+  "Image Name                     PID Services",
+  "========================= ======== ============================================"
+];
+entNames.forEach(function (n, i) {
+  entLines.push((n + "                              ").slice(0, 30) + " " + (3000 + i) + " N/A");
+});
+var entRes = A.analyze(P.parse(entLines.join("\n"), "w"));
+assert(entRes.unresolved.length === 0, "企业环境组件全部识别 (实际未识别: " + entRes.unresolved.length + ")");
+assert(entRes.findings.av.some(function (f) { return f.name.indexOf("Endpoint Security (ENS)") !== -1; }), "识别出 McAfee/Trellix ENS");
+assert(entRes.findings.av.some(function (f) { return f.name.indexOf("DLP") !== -1; }), "识别出 McAfee/Trellix DLP/FRP (fcag 系列)");
+assert(entRes.findings.av.some(function (f) { return f.name.indexOf("Policy Auditor") !== -1; }), "识别出 McAfee/Trellix Policy Auditor");
+assert(entRes.findings.remote.some(function (f) { return f.name.indexOf("DameWare") !== -1; }), "识别出 DameWare 远程控制 (DWRCS)");
+assert(entRes.findings.remote.some(function (f) { return f.name.indexOf("SCCM") !== -1; }), "识别出 SCCM 远程控制 (CmRcService)");
+assert(entRes.findings.vm.some(function (f) { return f.name === "VMware Tools"; }), "识别出 VMware Tools 组件 (vm3dservice/VGAuthService)");
+assert(entRes.findings.web.some(function (f) { return f.name.indexOf("IIS") !== -1; }), "识别出 IIS (inetinfo/WMSvc)");
+assert(entRes.findings.mail.some(function (f) { return f.name === "Microsoft Exchange Server"; }), "识别出 Microsoft Exchange Server");
+assert(entRes.findings.mail.some(function (f) { return f.name.indexOf("FIP-FS") !== -1; }), "识别出 Exchange FIP-FS 内容扫描");
+assert(entRes.findings.mail.some(function (f) { return f.name.indexOf("合规审计") !== -1; }), "识别出 Exchange 合规审计 (截断名匹配)");
+assert(entRes.findings.infra.some(function (f) { return f.name.indexOf("故障转移群集") !== -1; }), "识别出 Windows 故障转移群集服务 (clussvc/RHS)");
+assert(entRes.findings.midware.some(function (f) { return f.name.indexOf("SMSvcHost") !== -1; }), "识别出 WCF 宿主 (SMSvcHost)");
+assert(entRes.findings.ops.some(function (f) { return f.name === "NXLog"; }), "识别出 NXLog");
+assert(entRes.findings.sysutil.some(function (f) { return f.name.indexOf("ActivClient") !== -1; }), "识别出 HID ActivClient (acevents)");
+
+/* 6e. tasklist /svc 服务列(服务名不应被当成进程) */
+console.log("\n== tasklist /svc 服务列 ==");
+var svcText = [
+  "Image Name                     PID Services",
+  "========================= ======== ============================================",
+  "System Idle Process              0 N/A",
+  "svchost.exe                    916 PlugPlay, iphlpsvc, SCPolicySvc, ShellHWDetection, Winmgmt, TrkWks, LicenseManager, RemoteRegistry, WinHttpAutoProxySvc, TimeBrokerSvc",
+  "svchost.exe                   1024 DcomLaunch",
+  "SMSvcHost.exe                   88 NetTcpPortSharing"
+].join("\n");
+var svcParsed = P.parse(svcText, "w");
+assert(svcParsed.entries.length === 4, "服务列输出解析出 4 条进程 (实际: " + svcParsed.entries.length + ")");
+assert(svcParsed.entries.every(function (e) { return e.norm !== "plugplay" && e.norm !== "dcomlaunch"; }), "服务名未被当成进程");
+assert(svcParsed.entries.some(function (e) { return e.norm === "smsvchost"; }), "SMSvcHost 进程名正确解析");
+
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");
 assert(P.cleanName("N/A") === "", "N/A 占位符被清洗为空 (不产生伪进程 A)");

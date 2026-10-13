@@ -299,7 +299,7 @@
     }
     function has(cat) { return findings[cat] && findings[cat].length; }
 
-    if (has("av")) lines.push(T("pf.av", { list: names("av", 5) }));
+    if (has("av")) lines.push(T("pf.av", { list: names("av", Infinity) }));   // 终端防护项全部展示, 避免 EDR 被「共 N 项」截断隐藏
     if (has("tool")) lines.push(T("pf.tool", { list: names("tool", 5) }));
     if (has("remote")) lines.push(T("pf.remote", { list: names("remote", 5) }));
     if (has("tunnel")) lines.push(T("pf.tunnel", { list: names("tunnel", 4) }));

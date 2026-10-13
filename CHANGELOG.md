@@ -30,6 +30,7 @@
 
 ### 修复
 
+- 主机画像：「终端防护」行不再截断为最多 5 项，检测到的全部 AV/EDR（例如 Elastic Defend）都会展示，避免重要 EDR 被 `…(共 N 项)` 隐藏
 - 解析器：支持 `tasklist /svc` 的 `<名称> <PID> <服务列表>` 行，**服务名不再被误判为进程**
 - 解析器：NetExec 透传 `tasklist` 时列被截断（`<名称> <PID> N/A`），`N/A` 曾被拆成伪进程 `A`
 - 匹配：`tasklist` 会把超长进程名**截断为 25 字符**（如 `StartMenuExperienceHost.e`、`Microsoft.AAD.BrokerPlugi`、`elastic-otel-collector.ex`、`ac.activclient.gui.scagen`），现已能正确匹配

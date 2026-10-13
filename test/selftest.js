@@ -271,6 +271,21 @@ assert(newRes.findings.sysutil.some(function (f) { return f.name.indexOf("Intell
 assert(newRes.findings.sysutil.some(function (f) { return f.name.indexOf("PresentMon") !== -1; }), "识别出 Intel PresentMon");
 assert(newRes.findings.office.some(function (f) { return f.name.indexOf("Adobe") !== -1; }), "识别出 Adobe Acrobat 组件 (acrotray/AdobeCollabSync)");
 
+/* 6g. 画像"终端防护"行应完整展示(含非 McAfee 的 EDR) */
+console.log("\n== 画像终端防护行 ==");
+var avNames = ["masvc.exe", "macmnsvc.exe", "AuditManagerService.exe", "fcags.exe", "mfeesp.exe", "elastic-endpoint.exe", "Sysmon.exe"];
+var avLines = [
+  "Image Name                     PID Services",
+  "========================= ======== ============================================"
+];
+avNames.forEach(function (n, i) {
+  avLines.push((n + "                              ").slice(0, 30) + " " + (6000 + i) + " N/A");
+});
+var avRes = A.analyze(P.parse(avLines.join("\n"), "w"));
+var avProfile = avRes.profile.filter(function (l) { return l.indexOf("终端防护") !== -1; })[0] || "";
+assert(avProfile.indexOf("Elastic Defend") !== -1, "画像终端防护行包含 Elastic Defend (实际: " + avProfile + ")");
+assert(avProfile.indexOf("共 ") === -1, "画像终端防护行未截断(无「共 N 项」) (实际: " + avProfile + ")");
+
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");
 assert(P.cleanName("N/A") === "", "N/A 占位符被清洗为空 (不产生伪进程 A)");

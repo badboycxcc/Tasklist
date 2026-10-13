@@ -230,6 +230,47 @@ assert(svcParsed.entries.length === 4, "服务列输出解析出 4 条进程 (�
 assert(svcParsed.entries.every(function (e) { return e.norm !== "plugplay" && e.norm !== "dcomlaunch"; }), "服务名未被当成进程");
 assert(svcParsed.entries.some(function (e) { return e.norm === "smsvchost"; }), "SMSvcHost 进程名正确解析");
 
+/* 6f. 名称截断匹配 + 新一批桌面/企业组件 */
+console.log("\n== 截断名匹配与新组件 ==");
+var newNames = [
+  "vmrc.exe", "vmware-remotemks.exe", "elastic-otel-collector.ex",
+  "xclient.exe", "xclientnotif.exe", "xclientppl.exe", "iGoSwServer.exe",
+  "RtkAudUService64.exe", "RtkUWP.exe", "AdobeCollabSync.exe", "crashpad_handler.exe",
+  "Memory Compression", "PresentMonService.exe", "DWRCST.exe", "ipf_helper.exe",
+  "CrossDeviceResume.exe", "WorkFolders.exe", "StartMenuExperienceHost.e",
+  "Widgets.exe", "WidgetService.exe", "PhoneExperienceHost.exe", "WavesSvc64.exe",
+  "backgroundTaskHost.exe", "CLAudioBackgroundProcess.", "ac.activclient.gui.scagen",
+  "csc_ui.exe", "LockApp.exe", "Windows365.exe", "Microsoft.AAD.BrokerPlugi",
+  "ShellHost.exe", "WebexHost.exe", "AOTListenerService.exe", "Receiver.exe",
+  "redirector.exe", "AnalyticsSrv.exe", "concentr.exe", "SelfServicePlugin.exe",
+  "wfcrun32.exe", "osquery-extension.exe", "SystemSettings.exe", "MoUsoCoreWorker.exe",
+  "MoNotificationUx.exe", "acrotray.exe", "DataExchangeHost.exe", "SnippingTool.exe", "Notepad.exe"
+];
+var newLines = [
+  "Image Name                     PID Services",
+  "========================= ======== ============================================"
+];
+newNames.forEach(function (n, i) {
+  newLines.push((n + "                              ").slice(0, 30) + " " + (5000 + i) + " N/A");
+});
+var newRes = A.analyze(P.parse(newLines.join("\n"), "w"));
+assert(newRes.unresolved.length === 0, "截断名与新组件全部识别 (实际未识别: " + newRes.unresolved.length + ")");
+assert(newRes.findings.av.some(function (f) { return f.name.indexOf("XClient") !== -1; }), "识别出 Trellix XClient (xclient 系列)");
+assert(newRes.findings.vm.some(function (f) { return f.name.indexOf("VMRC") !== -1; }), "识别出 VMware Remote Console (vmrc)");
+assert(newRes.findings.remote.some(function (f) { return f.name === "Citrix Workspace"; }), "识别出 Citrix Workspace 组件 (concentr/wfcrun32 等)");
+assert(newRes.findings.im.some(function (f) { return f.name === "Cisco Webex"; }), "识别出 Cisco Webex (webexhost)");
+assert(newRes.findings.vpn.some(function (f) { return f.name.indexOf("Secure Client") !== -1; }), "识别出 Cisco Secure Client (csc_ui)");
+assert(newRes.findings.ops.some(function (f) { return f.name === "osquery"; }), "识别出 osquery 扩展 (osquery-extension)");
+assert(newRes.findings.ops.some(function (f) { return f.name.indexOf("Elastic OTel") !== -1; }), "识别出 Elastic OTel Collector (截断名)");
+assert(newRes.findings.system.some(function (f) { return f.name.indexOf("Memory Compression") !== -1; }), "识别出 Memory Compression");
+assert(newRes.findings.update.some(function (f) { return f.name.indexOf("MoUsoCoreWorker") !== -1; }), "识别出 Windows 更新工作进程");
+assert(newRes.findings.sysutil.some(function (f) { return f.name.indexOf("ActivClient") !== -1; }), "识别出截断名的 ActivClient 智能卡代理");
+assert(newRes.findings.sysutil.some(function (f) { return f.name.indexOf("Realtek") !== -1; }), "识别出 Realtek 音频服务");
+assert(newRes.findings.sysutil.some(function (f) { return f.name.indexOf("Waves") !== -1; }), "识别出 Waves MaxxAudio");
+assert(newRes.findings.sysutil.some(function (f) { return f.name.indexOf("Intelligo") !== -1; }), "识别出 Intelligo 音频服务 (iGoSwServer)");
+assert(newRes.findings.sysutil.some(function (f) { return f.name.indexOf("PresentMon") !== -1; }), "识别出 Intel PresentMon");
+assert(newRes.findings.office.some(function (f) { return f.name.indexOf("Adobe") !== -1; }), "识别出 Adobe Acrobat 组件 (acrotray/AdobeCollabSync)");
+
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");
 assert(P.cleanName("N/A") === "", "N/A 占位符被清洗为空 (不产生伪进程 A)");

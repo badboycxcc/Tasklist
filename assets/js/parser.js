@@ -45,11 +45,13 @@
     return s;
   }
 
-  /** 归一化(用于匹配): 小写、去 .exe/.scr/.com、压缩空白 */
+  /** 归一化(用于匹配): 小写、去 .exe/.scr/.com、去除被截断的扩展名、压缩空白 */
   function normName(raw) {
     return cleanName(raw)
       .toLowerCase()
       .replace(/(?:\.(?:exe|scr|com))+$/, "")
+      .replace(/\.(?:ex|e)$/, "")                          // tasklist 等截断的 .exe
+      .replace(/\.+$/, "")
       .replace(/\s+/g, " ")
       .trim();
   }

@@ -80,6 +80,7 @@
     { match: ["macmnsvc", "macompatsvc", "mctray", "updaterui"], name: "McAfee/Trellix Agent", vendor: "Trellix", cat: "av", os: "w", desc: "McAfee/Trellix Agent 代理(Common Services/兼容服务/托盘/AutoUpdate)" },
     { match: ["fcag", "fcags", "fcagswd", "fcom", "fcnm", "dlpsensor", "edpa"], name: "McAfee/Trellix DLP / 移动介质保护", vendor: "Trellix", cat: "av", os: "w", desc: "数据防泄漏(FRP/DLP)端点组件(文件与移动介质保护)" },
     { match: ["auditmanagerservice", "enginemain", "fimcli"], name: "McAfee/Trellix Policy Auditor / 应用控制", vendor: "Trellix", cat: "av", os: "w", desc: "合规审计/应用控制(Solidcore)代理" },
+    { match: ["xclient"], prefix: true, name: "Trellix XClient 终端代理", vendor: "Trellix", cat: "av", os: "w", desc: "Trellix 端点代理 XClient 组件(EDR/EDRF; xclientppl 为受保护进程组件)" },
     { match: ["ntrtscan", "tmlisten", "coreserviceshell", "tmccsf"], name: "Trend Micro", vendor: "趋势科技", cat: "av", os: "w", desc: "趋势科技 OfficeScan / Apex One" },
     { match: ["savservice", "hmpalert"], name: "Sophos", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos 终端防护(含 HitmanPro.Alert)" },
     { match: ["psanhost"], name: "Panda Security", vendor: "WatchGuard", cat: "av", os: "w", desc: "熊猫安全 终端防护" },
@@ -127,9 +128,9 @@
     { match: ["rdpclip", "rdpinit"], name: "RDP 会话组件", vendor: "Microsoft", cat: "remote", os: "w", desc: "RDP 会话剪贴板/登录组件(提示存在 RDP 登录会话)" },
     { match: ["wsmprovhost"], name: "WinRM 远程管理宿主", vendor: "Microsoft", cat: "remote", os: "w", desc: "PowerShell Remoting/WinRM 远程会话宿主(存在远程管理连接)" },
     { match: ["winvnc", "tvnserver", "uvnc_service", "vncserver"], name: "VNC Server", vendor: "RealVNC/TightVNC/UltraVNC", cat: "remote", os: "b", desc: "VNC 远程桌面服务端" },
-    { match: ["wfica32"], name: "Citrix Workspace", vendor: "Citrix", cat: "remote", os: "w", desc: "Citrix 虚拟桌面/应用客户端(VDI 环境线索)" },
+    { match: ["wfica32", "concentr", "wfcrun32", "selfserviceplugin", "receiver", "redirector", "analyticssrv", "aotlistenerservice"], name: "Citrix Workspace", vendor: "Citrix", cat: "remote", os: "w", desc: "Citrix Workspace/ICA 客户端组件(VDI 环境线索)" },
     { match: ["xrdp"], prefix: true, name: "xrdp", vendor: "xrdp", cat: "remote", os: "l", desc: "Linux 下的 RDP 服务端" },
-    { match: ["dwrcs"], name: "SolarWinds DameWare 远程控制服务", vendor: "SolarWinds", cat: "remote", os: "w", desc: "DameWare Mini Remote Control 服务端(DWRCS, 远程控制入口)" },
+    { match: ["dwrcs", "dwrcst"], name: "SolarWinds DameWare 远程控制服务", vendor: "SolarWinds", cat: "remote", os: "w", desc: "DameWare Mini Remote Control 服务端(DWRCS/DWRCST, 远程控制入口)" },
     { match: ["cmrcservice"], name: "SCCM 远程控制服务", vendor: "Microsoft", cat: "remote", os: "w", desc: "ConfigMgr(SCCM) 远程控制服务(CmRcService, 企业统一管理/远程协助)" },
 
     /* ---------- 隧道 / 代理 ---------- */
@@ -143,7 +144,7 @@
     { match: ["clash"], prefix: true, name: "Clash", vendor: "Clash", cat: "tunnel", os: "b", desc: "代理客户端" },
 
     /* ---------- VPN / 零信任 ---------- */
-    { match: ["vpnagent", "vpnui"], name: "Cisco AnyConnect / Secure Client", vendor: "Cisco", cat: "vpn", os: "w", desc: "思科 SSL VPN 客户端" },
+    { match: ["vpnagent", "vpnui", "csc_ui"], name: "Cisco AnyConnect / Secure Client", vendor: "Cisco", cat: "vpn", os: "w", desc: "思科 SSL VPN / Secure Client 客户端(含 csc_ui 界面)" },
     { match: ["globalprotect", "pangpa", "pangps"], name: "Palo Alto GlobalProtect", vendor: "Palo Alto", cat: "vpn", os: "w", desc: "企业 SSL VPN 客户端" },
     { match: ["forticlient", "fcconfig"], name: "FortiClient", vendor: "Fortinet", cat: "vpn", os: "w", desc: "飞塔 VPN/终端客户端" },
     { match: ["easyconnect"], name: "深信服 EasyConnect", vendor: "深信服", cat: "vpn", os: "w", desc: "深信服 SSL VPN 客户端" },
@@ -234,6 +235,8 @@
     { match: ["vmtoolsd", "vmware-user-suid-wrapper", "vmtools", "vm3dservice", "vgauthservice", "vmwaretray", "vmwareuser"], name: "VMware Tools", vendor: "VMware", cat: "vm", os: "b", desc: "VMware 工具及组件(vmtoolsd/vm3dservice/VGAuthService 等)" },
     { match: ["vmware-vmx"], name: "VMware Workstation 虚拟机进程", vendor: "VMware", cat: "vm", os: "w", desc: "本机正在以宿主机身份运行 VMware 虚拟机" },
     { match: ["vmware"], prefix: false, name: "VMware Workstation", vendor: "VMware", cat: "vm", os: "w", desc: "VMware 虚拟化软件界面" },
+    { match: ["vmrc"], name: "VMware Remote Console (VMRC)", vendor: "VMware", cat: "vm", os: "w", desc: "VMware 远程控制台(连接 vSphere/ESXi 虚拟机控制台)" },
+    { match: ["vmware-remotemks"], name: "VMware Remote MKS", vendor: "VMware", cat: "vm", os: "w", desc: "VMware 远程 MKS(画面/键鼠转发, VMRC/Workstation 组件)" },
     { match: ["vboxservice", "vboxsvc", "virtualboxvm"], name: "VirtualBox", vendor: "Oracle", cat: "vm", os: "b", desc: "VirtualBox 相关组件(宿主或虚拟机内)" },
     { match: ["qemu-system"], prefix: true, name: "QEMU", vendor: "QEMU", cat: "vm", os: "b", desc: "QEMU 虚拟机进程(本机可能是虚拟化宿主机)" },
     { match: ["qemu-ga"], name: "QEMU Guest Agent", vendor: "QEMU", cat: "vm", os: "b", desc: "QEMU 客户端代理(当前系统疑似为 QEMU/KVM 虚拟机)" },
@@ -315,7 +318,7 @@
     { match: ["sgtool", "sogoucloud", "pinyinup"], name: "搜狗输入法", vendor: "搜狗", cat: "sysutil", os: "w", desc: "搜狗输入法组件" },
     { match: ["notepad"], name: "记事本", vendor: "Microsoft", cat: "sysutil", os: "w", desc: "Windows 记事本" },
     { match: ["snippingtool"], name: "截图工具", vendor: "Microsoft", cat: "sysutil", os: "w", desc: "Windows 截图工具(有人正在截图)" },
-    { match: ["acevents"], name: "HID ActivClient (智能卡中间件)", vendor: "HID Global", cat: "sysutil", os: "w", desc: "ActivIdentity/HID ActivClient 事件服务(存在智能卡/USB Key 登录)" },
+    { match: ["acevents", "ac.activclient"], prefix: true, name: "HID ActivClient (智能卡中间件)", vendor: "HID Global", cat: "sysutil", os: "w", desc: "ActivIdentity/HID ActivClient 组件(事件服务/智能卡代理, 存在智能卡/USB Key 登录)" },
 
     /* ---------- 办公软件 ---------- */
     { match: ["winword", "excel", "powerpnt", "outlook", "onenote", "msaccess"], name: "Microsoft Office", vendor: "Microsoft", cat: "office", os: "w", desc: "Office 组件(Word/Excel/PPT/Outlook 等)" },
@@ -323,7 +326,7 @@
     { match: ["officeclicktorun"], name: "Office 后台服务", vendor: "Microsoft", cat: "office", os: "w", desc: "Office 点击运行服务" },
     { match: ["wps", "wpscloudsvr", "wpsupdate", "ksomisc"], prefix: true, name: "WPS Office", vendor: "金山办公", cat: "office", os: "w", desc: "WPS Office(含云服务/更新组件)" },
     { match: ["et", "wpp"], prefix: false, name: "WPS Office 组件", vendor: "金山办公", cat: "office", os: "w", desc: "WPS 表格/演示" },
-    { match: ["acrobat", "acrord32"], prefix: true, name: "Adobe Acrobat/Reader", vendor: "Adobe", cat: "office", os: "w", desc: "PDF 阅读/编辑" },
+    { match: ["acrobat", "acrord32", "acrotray", "adobecollabsync"], prefix: true, name: "Adobe Acrobat/Reader", vendor: "Adobe", cat: "office", os: "w", desc: "PDF 阅读/编辑(含 acrotray/协作同步 AdobeCollabSync)" },
     { match: ["foxit"], prefix: true, name: "福昕 PDF", vendor: "Foxit", cat: "office", os: "w", desc: "Foxit Reader/PDF 编辑器" },
 
     /* ---------- 通讯 / 会议 ---------- */
@@ -339,6 +342,7 @@
     { match: ["slack"], prefix: true, name: "Slack", vendor: "Salesforce", cat: "im", os: "b", desc: "Slack" },
     { match: ["teams", "ms-teams"], prefix: false, name: "Microsoft Teams", vendor: "Microsoft", cat: "im", os: "b", desc: "Teams 会议/协作" },
     { match: ["zoom"], prefix: true, name: "Zoom", vendor: "Zoom", cat: "im", os: "b", desc: "Zoom 视频会议" },
+    { match: ["webex"], prefix: true, name: "Cisco Webex", vendor: "Cisco", cat: "im", os: "b", desc: "Cisco Webex 会议/协作客户端" },
     { match: ["discord"], prefix: true, name: "Discord", vendor: "Discord", cat: "im", os: "b", desc: "Discord" },
 
     /* ---------- 娱乐 / 多媒体 ---------- */
@@ -364,7 +368,7 @@
     { match: ["system idle process", "idle"], name: "System Idle Process", vendor: "Microsoft", cat: "system", os: "w", desc: "系统空闲进程" },
     { match: ["system"], name: "System", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 内核进程" },
     { match: ["registry"], name: "Registry", vendor: "Microsoft", cat: "system", os: "w", desc: "注册表进程" },
-    { match: ["memcompression"], name: "MemCompression", vendor: "Microsoft", cat: "system", os: "w", desc: "内存压缩进程(内存紧张时出现)" },
+    { match: ["memcompression", "memory compression"], name: "Memory Compression", vendor: "Microsoft", cat: "system", os: "w", desc: "内存压缩进程(内存紧张时出现)" },
     { match: ["secure system"], name: "Secure System", vendor: "Microsoft", cat: "system", os: "w", desc: "基于虚拟化的安全(VBS)进程" },
     { match: ["smss"], name: "smss.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "会话管理器" },
     { match: ["csrss"], name: "csrss.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "客户端/服务器运行时子系统" },
@@ -402,6 +406,17 @@
     { match: ["servermanager"], name: "Windows Server Manager", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 服务器管理器(服务器操作系统线索)" },
     { match: ["wmiapssrv", "wmiapsrv"], name: "WMI 性能适配器", vendor: "Microsoft", cat: "system", os: "w", desc: "WMI Performance Adapter 服务" },
     { match: ["lockapphost"], name: "LockAppHost.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 锁屏界面宿主" },
+    { match: ["lockapp"], name: "LockApp.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 锁屏应用(锁屏状态)" },
+    { match: ["widgets", "widgetservice"], name: "Windows 小组件", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 小组件面板/服务(Widgets)" },
+    { match: ["systemsettings"], name: "Windows 设置", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 设置应用(有人正在查看系统设置)" },
+    { match: ["backgroundtaskhost"], name: "BackgroundTaskHost.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "UWP 后台任务宿主" },
+    { match: ["phoneexperiencehost"], name: "手机连接 (Phone Link)", vendor: "Microsoft", cat: "system", os: "w", desc: "Phone Link/你的手机 宿主(存在手机联动)" },
+    { match: ["dataexchangehost"], name: "Data Exchange Host", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 数据交换宿主(手写/墨迹相关)" },
+    { match: ["crossdeviceresume"], name: "跨设备接续 (CrossDeviceResume)", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 跨设备接续/继续使用(手机与 PC 联动)" },
+    { match: ["shellhost"], name: "ShellHost.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows Shell 宿主(Win11 24H2+)" },
+    { match: ["windows365"], name: "Windows 365 / Windows App", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 365 云电脑 / Windows App 客户端" },
+    { match: ["workfolders"], name: "工作文件夹 (Work Folders)", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 工作文件夹同步客户端(企业数据同步)" },
+    { match: ["microsoft.aad.brokerplugin"], name: "Microsoft AAD Broker Plugin", vendor: "Microsoft", cat: "system", os: "w", desc: "Azure AD 账户代理插件(微软账户/Entra 登录)" },
     { match: ["searchui"], name: "Windows 搜索 UI", vendor: "Microsoft", cat: "system", os: "w", desc: "Cortana/搜索界面进程(Win11 为 SearchHost)" },
     { match: ["plugplay", "iphlpsvc", "scpolicysvc", "shellhwdetection", "winmgmt", "trkwks", "licensemanager", "remoteregistry", "winhttpautoproxysvc", "timebrokersvc", "nettcpportsharing"], name: "Windows 系统服务(服务名)", vendor: "Microsoft", cat: "system", os: "w", desc: "svchost.exe 托管的 Windows 服务名(常见于 tasklist /svc 输出的服务列)" },
 
@@ -533,9 +548,10 @@
     { match: ["filebeat", "metricbeat", "auditbeat", "packetbeat"], name: "Elastic Beats", vendor: "Elastic", cat: "ops", os: "b", desc: "日志/指标/审计采集器" },
     { match: ["elastic-agent"], prefix: true, name: "Elastic Agent", vendor: "Elastic", cat: "ops", os: "b", desc: "Elastic 统一采集代理" },
     { match: ["ccmexec"], name: "SCCM 管理代理", vendor: "Microsoft", cat: "ops", os: "w", desc: "Microsoft SCCM/ConfigMgr 客户端代理(企业统一管理线索)" },
-    { match: ["osqueryd", "osquery"], name: "osquery", vendor: "Meta", cat: "ops", os: "b", desc: "SQL 化系统信息采集(常见于安全监控)" },
+    { match: ["osqueryd", "osquery", "osquery-extension"], name: "osquery", vendor: "Meta", cat: "ops", os: "b", desc: "SQL 化系统信息采集(常见于安全监控)" },
     { match: ["glpi-agent", "fusioninventory-agent"], prefix: true, name: "GLPI Agent", vendor: "Teclib", cat: "ops", os: "b", desc: "GLPI 资产盘点代理(软硬件清单采集, 原 FusionInventory)" },
     { match: ["nxlog"], name: "NXLog", vendor: "NXLog", cat: "ops", os: "b", desc: "日志采集/转发代理" },
+    { match: ["elastic-otel-collector"], name: "Elastic OTel Collector (EDOT)", vendor: "Elastic", cat: "ops", os: "b", desc: "Elastic 发行版 OpenTelemetry Collector(Elastic Agent/EDOT 采集)" },
     { match: ["supervisord", "supervisor"], prefix: true, name: "Supervisor", vendor: "Supervisor", cat: "ops", os: "l", desc: "进程守护管理(常管理各类业务进程)" },
     { match: ["monit"], name: "Monit", vendor: "mmonit", cat: "ops", os: "l", desc: "进程/资源监控守护" },
     { match: ["pm2"], prefix: true, name: "PM2", vendor: "Keymetrics", cat: "ops", os: "b", desc: "Node.js 进程管理器" },
@@ -569,6 +585,13 @@
     { match: ["nbservice"], name: "Nero BackItUp", vendor: "Nero", cat: "backup", os: "w", desc: "Nero 备份服务(疑似)" },
     { match: ["igfx"], prefix: true, name: "Intel 显卡组件", vendor: "Intel", cat: "sysutil", os: "w", desc: "Intel 核显驱动服务/托盘(igfxCUIService、igfxEM 等)" },
     { match: ["rtkngui"], prefix: true, name: "Realtek 音频管理器", vendor: "Realtek", cat: "sysutil", os: "w", desc: "Realtek 声卡管理程序" },
+    { match: ["rtkauduservice", "rtkuwp"], prefix: true, name: "Realtek 音频服务", vendor: "Realtek", cat: "sysutil", os: "w", desc: "Realtek Audio Universal Service / 音频控制台(UWP)" },
+    { match: ["wavessvc64", "wavessvc"], name: "Waves MaxxAudio 服务", vendor: "Waves Audio", cat: "sysutil", os: "w", desc: "Waves MaxxAudio 音效服务(Dell 等 OEM 常见)" },
+    { match: ["igoswserver"], name: "Intelligo 音频服务 (iGoSwServer)", vendor: "Intelligo", cat: "sysutil", os: "w", desc: "Intelligo APO 音效服务(Alienware/Dell 常见)" },
+    { match: ["claudiobackgroundprocess"], name: "OEM 音频后台进程 (CLAudioBackgroundProcess)", vendor: "通用", cat: "sysutil", os: "w", desc: "OEM 声卡驱动附带的后台进程(厂商未公开, 建议按文件签名确认)" },
+    { match: ["ipf_helper", "ipf_uf"], name: "Intel IPF 服务 (Innovation Platform Framework)", vendor: "Intel", cat: "sysutil", os: "w", desc: "Intel 创新平台框架服务/工具(动态调优 DTT 组件)" },
+    { match: ["presentmonservice"], name: "Intel PresentMon 服务", vendor: "Intel", cat: "sysutil", os: "w", desc: "Intel PresentMon 性能监测服务(帧率/GPU 采集)" },
+    { match: ["crashpad_handler"], name: "Crashpad 崩溃处理进程", vendor: "Google", cat: "sysutil", os: "b", desc: "Crashpad 崩溃上报处理器(Chrome/Electron 等众多应用共用, 需看父进程)" },
     { match: ["atkexcomsvc"], prefix: true, name: "ASUS 主板工具组件", vendor: "华硕", cat: "sysutil", os: "w", desc: "ASUS AI Suite / ATK 驱动组件(疑似)" },
     { match: ["hpwuschd"], prefix: true, name: "HP 软件更新", vendor: "HP", cat: "update", os: "w", desc: "HP 更新计划任务" },
     { match: ["iusb3mon"], name: "Intel USB 3.0 监视器", vendor: "Intel", cat: "sysutil", os: "w", desc: "Intel USB 3.0 监视程序" },
@@ -588,7 +611,9 @@
     { match: ["jusched"], name: "Java 更新程序", vendor: "Oracle", cat: "update", os: "w", desc: "Java 自动更新" },
     { match: ["trustedinstaller"], name: "TrustedInstaller", vendor: "Microsoft", cat: "update", os: "w", desc: "Windows 模块安装服务(系统更新中)" },
     { match: ["unsecapp"], name: "unsecapp.exe", vendor: "Microsoft", cat: "update", os: "w", desc: "WMI 事件接收进程" },
-    { match: ["updateservice"], name: "UpdateService (通用更新服务)", vendor: "通用", cat: "update", os: "w", desc: "通用更新服务名(常见于 Exchange FIP-FS 内容扫描; 亦见于其他厂商), 建议按路径与签名确认" }
+    { match: ["updateservice"], name: "UpdateService (通用更新服务)", vendor: "通用", cat: "update", os: "w", desc: "通用更新服务名(常见于 Exchange FIP-FS 内容扫描; 亦见于其他厂商), 建议按路径与签名确认" },
+    { match: ["mousocoreworker"], name: "Windows 更新核心工作进程 (MoUsoCoreWorker)", vendor: "Microsoft", cat: "update", os: "w", desc: "Windows Update 会话编排核心工作进程" },
+    { match: ["monotificationux"], name: "Windows 更新通知 (MoNotificationUx)", vendor: "Microsoft", cat: "update", os: "w", desc: "Windows Update 通知界面(提示有待安装更新)" }
   ];
 
   /* ========== 命令行关键字签名 ==========

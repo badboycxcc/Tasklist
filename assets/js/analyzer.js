@@ -95,6 +95,19 @@
       }
     }
     if (best) return { sig: best.sig, type: "prefix" };
+    // 3) 名称被截断(tasklist 将超长名称截断为前缀)时的匹配
+    var bestTrunc = null;
+    for (i = 0; i < sigs.length; i++) {
+      s = sigs[i];
+      if (!osOk(s.os, platform)) continue;
+      for (j = 0; j < s.match.length; j++) {
+        m = s.match[j];
+        if (nrm.length >= 16 && nrm.length < m.length && m.indexOf(nrm) === 0) {
+          if (!bestTrunc || m.length < bestTrunc.len) bestTrunc = { sig: s, len: m.length };
+        }
+      }
+    }
+    if (bestTrunc) return { sig: bestTrunc.sig, type: "prefix" };
     return null;
   }
 

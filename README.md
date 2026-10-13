@@ -16,7 +16,7 @@
   - Linux：`ps aux` / `ps -ef` / `top -bn1`
   - 远程执行工具输出：NetExec / CrackMapExec（`nxc ... -x "tasklist"` 等）日志会自动剥离 `[协议 IP 端口 主机名]` 前缀并丢弃 `[+]` 状态行；列被截断为 `<名称> <PID> N/A` 的表格也能正确解析（`N/A` 不会被误判成进程名 `A`）
   - 兜底：一行一个进程名，或简单的“名称 PID”列表
-- **470+ 软件签名库**：覆盖国内外杀软/EDR/XDR（火绒、360、Kaspersky、CrowdStrike、Palo Alto Cortex XDR、McAfee/Trellix（ENS/Agent/DLP/Policy Auditor）、VMware Carbon Black、Cybereason、Trellix/FireEye HX 等）、Microsoft Exchange Server 全套角色组件、IIS/MSMQ/故障转移群集、SQL Server 全套组件、Windows 内置组件、虚拟化/瘦客户端（VMware Tools、DameWare、SCCM 远程控制）、资产盘点 Agent（GLPI）、远程控制（TeamViewer、AnyDesk、向日葵、ToDesk…）、穿透工具（frp、ngrok…）、数据库、Web 服务、容器/编排、云厂商 Agent（阿里云/腾讯云）等
+- **500+ 软件签名库**：覆盖国内外杀软/EDR/XDR（火绒、360、Kaspersky、CrowdStrike、Palo Alto Cortex XDR、McAfee/Trellix（ENS/Agent/DLP/Policy Auditor/XClient）、VMware Carbon Black、Cybereason、Trellix/FireEye HX 等）、Microsoft Exchange Server 全套角色组件、IIS/MSMQ/故障转移群集、SQL Server 全套组件、Windows 内置组件、虚拟化/远程（VMware Tools/VMRC、DameWare、SCCM/Citrix 远程控制）、资产盘点 Agent（GLPI、osquery）、远程控制（TeamViewer、AnyDesk、向日葵、ToDesk…）、隧道代理（frp、ngrok…）、数据库、Web 服务、容器/编排、云厂商 Agent（阿里云/腾讯云）等
 - **中英双语界面**：右上角一键切换 `中文 / EN`，识别名称、软件说明、主机画像与导出报告全部同步切换
 - **命令行关键字识别**：对 `java` / `python` 等宿主进程，扫描完整命令行识别 Burp Suite、SQLMap、Metasploit、宝塔面板等
 - **可疑启发式检测**：仿冒系统进程名（如 `svch0st.exe`、`scvhost.exe`）、双扩展名、非 ASCII 同形字、从临时/公共目录运行、UNC 路径运行
@@ -141,7 +141,7 @@ tasklist/
 **TaskList Inspector** is a pure client-side web tool that analyzes process lists (`tasklist` / `ps aux` / `ps -ef` / `top` / NetExec logs) to identify software running on Windows & Linux hosts — built for pentest recon, asset inventory and incident response. The UI is bilingual (中文 / English) — switch it in the top-right corner.
 
 - **Inputs**: `tasklist` (table / CSV / list), PowerShell `Get-Process`, `ps aux`, `ps -ef`, `top -bn1`, NetExec/CrackMapExec logs (prefixed output auto-cleaned; truncated `<name> <PID> N/A` tables handled), plain name lists
-- **470+ signatures**: AV/EDR/XDR (incl. Cortex XDR, McAfee/Trellix ENS/Agent/DLP, Carbon Black, Cybereason, Trellix HX), full Microsoft Exchange role set, IIS/MSMQ/Failover Clustering, full SQL Server component set, Windows built-ins, virtualization/remote (VMware Tools, DameWare, SCCM Remote Control), inventory agents (GLPI), remote control (incl. AnyDesk), tunnels, VPN/zero-trust, databases, web services, containers/K8s, dev tools, office/IM, cloud agents …
+- **500+ signatures**: AV/EDR/XDR (incl. Cortex XDR, McAfee/Trellix ENS/Agent/DLP/XClient, Carbon Black, Cybereason, Trellix HX), full Microsoft Exchange role set, IIS/MSMQ/Failover Clustering, full SQL Server component set, Windows built-ins, virtualization/remote (VMware Tools/VMRC, DameWare, SCCM/Citrix), inventory agents (GLPI, osquery), remote control (incl. AnyDesk), tunnels, VPN/zero-trust, databases, web services, containers/K8s, dev tools, office/IM, cloud agents …
 - **Command-line keyword scan**: spots Burp Suite, SQLMap, Metasploit, BT Panel and more inside java/python command lines
 - **Suspicious heuristics**: typosquatted system processes (`svch0st.exe`), double extensions, non-ASCII homoglyphs, execution from temp/public directories, UNC paths
 - **Host profiling** and **report export** (Markdown / JSON / TXT), 100% client-side, offline-ready

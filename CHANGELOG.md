@@ -22,7 +22,7 @@
   - DameWare Mini Remote Control（`DWRCS` / `DWRCST`）、SCCM 远程控制（`CmRcService`）
   - Citrix Workspace 组件（`concentr` / `wfcrun32` / `SelfServicePlugin` / `Receiver` / `redirector` / `AnalyticsSrv` / `AOTListenerService`）
 - **Windows 内置组件**
-  `LogonUI` / `AggregatorHost` / `TabTip(32)` / `mmc` / `vds` / `msdtc` / `ServerManager` / `Memory Compression` / `LockApp(Host)` / 小组件 / `ShellHost` / `Windows 365` / `Work Folders` / `Microsoft.AAD.BrokerPlugin` / `MoUsoCoreWorker` / `MoNotificationUx` 等
+  `LogonUI` / `AggregatorHost` / `TabTip(32)` / `mmc` / `vds` / `msdtc` / `ServerManager` / `Memory Compression` / `LockApp(Host)` / 小组件 / `ShellHost` / `Windows 365` / `Work Folders` / `Microsoft.AAD.BrokerPlugin` / `MoUsoCoreWorker` / `MoNotificationUx` / `SearchProtocolHost` / `SearchFilterHost` / `sppsvc` / `SppExtComObj` 等
 - **桌面 / 外设 / 音频**
   Realtek 音频服务、Waves MaxxAudio、Intelligo（`iGoSwServer`）、OEM 音频后台进程（`CLAudioBackgroundProcess`）、Intel IPF（`ipf_helper`）、Intel PresentMon（`PresentMonService`）
 - **其它**
@@ -31,6 +31,7 @@
 ### 修复
 
 - 主机画像：「终端防护」行不再截断为最多 5 项，检测到的全部 AV/EDR（例如 Elastic Defend）都会展示，避免重要 EDR 被 `…(共 N 项)` 隐藏
+- 解析器：兜底解析跳过表头行（含带主机名前缀的 `Image Name … PID Services`），避免主机名被误当成进程
 - 解析器：支持 `tasklist /svc` 的 `<名称> <PID> <服务列表>` 行，**服务名不再被误判为进程**
 - 解析器：NetExec 透传 `tasklist` 时列被截断（`<名称> <PID> N/A`），`N/A` 曾被拆成伪进程 `A`
 - 匹配：`tasklist` 会把超长进程名**截断为 25 字符**（如 `StartMenuExperienceHost.e`、`Microsoft.AAD.BrokerPlugi`、`elastic-otel-collector.ex`、`ac.activclient.gui.scagen`），现已能正确匹配

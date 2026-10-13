@@ -286,6 +286,25 @@ var avProfile = avRes.profile.filter(function (l) { return l.indexOf("终端防�
 assert(avProfile.indexOf("Elastic Defend") !== -1, "画像终端防护行包含 Elastic Defend (实际: " + avProfile + ")");
 assert(avProfile.indexOf("共 ") === -1, "画像终端防护行未截断(无「共 N 项」) (实际: " + avProfile + ")");
 
+/* 6h. Windows 内置进程 + 表头行不产生伪进程 */
+console.log("\n== Windows 内置进程 ==");
+var winBuiltin = P.parse([
+  "Image Name                     PID Services",
+  "========================= ======== ============================================",
+  "sppsvc.exe                    1808 N/A",
+  "SppExtComObj.Exe              2244 N/A",
+  "SearchProtocolHost.exe        3100 N/A",
+  "SearchFilterHost.exe          3140 N/A"
+].join("\n"), "w");
+var winBuiltinRes = A.analyze(winBuiltin);
+assert(winBuiltinRes.unresolved.length === 0, "Windows 内置进程全部识别 (实际未识别: " + winBuiltinRes.unresolved.length + ")");
+var hostHeader = P.parse([
+  "AFRIMSTHAMAAGT Image Name                     PID Services",
+  "chrome.exe",
+  "nginx"
+].join("\n"), null);
+assert(hostHeader.entries.every(function (e) { return e.norm.indexOf("afrimsthamaagt") === -1; }), "带主机名前缀的表头行不产生伪进程 (实际: " + hostHeader.entries.map(function (e) { return e.raw; }).join(", ") + ")");
+
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");
 assert(P.cleanName("N/A") === "", "N/A 占位符被清洗为空 (不产生伪进程 A)");

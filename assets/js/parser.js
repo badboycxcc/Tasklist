@@ -335,6 +335,8 @@
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
       if (!line.trim() || /=====/.test(line)) continue;
+      // 表头行(可能带主机名前缀)不是进程
+      if (/(映像名称|Image Name|内存使用|Mem Usage)/i.test(line)) continue;
       var t = line.trim().split(/\s+/);
       var best = null, bestScore = 0, bestIdx = -1;
       for (var j = 0; j < t.length; j++) {

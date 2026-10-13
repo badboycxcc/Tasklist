@@ -14,7 +14,9 @@
 - **多格式自动识别**
   - Windows：`tasklist` 默认表格 / `tasklist /fo csv` / `tasklist /fo list` / PowerShell `Get-Process`
   - Linux：`ps aux` / `ps -ef` / `top -bn1`
-  - 远程执行工具输出：NetExec / CrackMapExec（`nxc ... -x "tasklist"` 等）日志会自动剥离 `[协议 IP 端口 主机名]` 前缀并丢弃 `[+]` 状态行；列被截断为 `<名称> <PID> N/A` 的表格也能正确解析（`N/A` 不会被误判成进程名 `A`）
+  - `tasklist /svc`：服务列里的服务名不会被当成进程，`N/A` 占位符也不会被误判成进程名 `A`
+  - 名称截断容错：`tasklist` 会把超长进程名截断为 25 字符（如 `StartMenuExperienceHost.e`、`Microsoft.AAD.BrokerPlugi`、`elastic-otel-collector.ex`），解析器仍能正确匹配
+  - 远程执行工具输出：NetExec / CrackMapExec（`nxc ... -x "tasklist"` 等）日志会自动剥离 `[协议 IP 端口 主机名]` 前缀并丢弃 `[+]` 状态行
   - 兜底：一行一个进程名，或简单的“名称 PID”列表
 - **500+ 软件签名库**：覆盖国内外杀软/EDR/XDR（火绒、360、Kaspersky、CrowdStrike、Palo Alto Cortex XDR、McAfee/Trellix（ENS/Agent/DLP/Policy Auditor/XClient）、VMware Carbon Black、Cybereason、Trellix/FireEye HX 等）、Microsoft Exchange Server 全套角色组件、IIS/MSMQ/故障转移群集、SQL Server 全套组件、Windows 内置组件、虚拟化/远程（VMware Tools/VMRC、DameWare、SCCM/Citrix 远程控制）、资产盘点 Agent（GLPI、osquery）、远程控制（TeamViewer、AnyDesk、向日葵、ToDesk…）、隧道代理（frp、ngrok…）、数据库、Web 服务、容器/编排、云厂商 Agent（阿里云/腾讯云）等
 - **中英双语界面**：右上角一键切换 `中文 / EN`，识别名称、软件说明、主机画像与导出报告全部同步切换
@@ -124,6 +126,14 @@ tasklist/
 - 英文翻译：在 `assets/js/signatures.en.js` 中补一条 `"类别|名称": "英文描述"`；
   若中文名称本身需要英文化，用 `{ name: "English Name", desc: "..." }`；缺失时会回退显示中文描述
 
+## 🧾 变更记录
+
+| 日期 | 变更 |
+| --- | --- |
+| 2026-10-13 | 签名库扩充至 500+：McAfee/Trellix（ENS/Agent/DLP/Policy Auditor/**XClient**）、Microsoft Exchange 全套角色组件、IIS/MSMQ/故障转移群集、Citrix Workspace、DameWare、SCCM 远程控制、VMware Tools/VMRC/Remote MKS、Windows 内置组件（LockApp/小组件/ShellHost 等）、Realtek/Waves/Intelligo 音频、Intel IPF/PresentMon、Elastic OTel Collector、osquery 扩展、Adobe/Cisco Webex 等 |
+| 2026-10-13 | 解析器：支持 `tasklist /svc` 服务列；支持 `tasklist` 25 字符名称截断匹配；修复截断列 `<名称> <PID> N/A` 把 `N/A` 误判为进程 `A` |
+| 2026-10-08 | 新增 Palo Alto Cortex XDR 全组件、SQL Server 全套组件、Windows 内置组件（LogonUI/AggregatorHost 等）、GLPI Agent 等签名 |
+
 ## 🎨 宣传素材
 
 图标与分享卡片素材位于 `assets/`，可直接引用线上地址（如 `https://tasklist.cxaqhq.cn/assets/icon-512.png`）：
@@ -140,7 +150,7 @@ tasklist/
 
 **TaskList Inspector** is a pure client-side web tool that analyzes process lists (`tasklist` / `ps aux` / `ps -ef` / `top` / NetExec logs) to identify software running on Windows & Linux hosts — built for pentest recon, asset inventory and incident response. The UI is bilingual (中文 / English) — switch it in the top-right corner.
 
-- **Inputs**: `tasklist` (table / CSV / list), PowerShell `Get-Process`, `ps aux`, `ps -ef`, `top -bn1`, NetExec/CrackMapExec logs (prefixed output auto-cleaned; truncated `<name> <PID> N/A` tables handled), plain name lists
+- **Inputs**: `tasklist` (table / CSV / list / **`/svc`**), PowerShell `Get-Process`, `ps aux`, `ps -ef`, `top -bn1`, NetExec/CrackMapExec logs (prefixed output auto-cleaned), plain name lists — plus tolerance for `N/A` placeholders and `tasklist`'s 25-character name truncation (`StartMenuExperienceHost.e`, `Microsoft.AAD.BrokerPlugi`, …)
 - **500+ signatures**: AV/EDR/XDR (incl. Cortex XDR, McAfee/Trellix ENS/Agent/DLP/XClient, Carbon Black, Cybereason, Trellix HX), full Microsoft Exchange role set, IIS/MSMQ/Failover Clustering, full SQL Server component set, Windows built-ins, virtualization/remote (VMware Tools/VMRC, DameWare, SCCM/Citrix), inventory agents (GLPI, osquery), remote control (incl. AnyDesk), tunnels, VPN/zero-trust, databases, web services, containers/K8s, dev tools, office/IM, cloud agents …
 - **Command-line keyword scan**: spots Burp Suite, SQLMap, Metasploit, BT Panel and more inside java/python command lines
 - **Suspicious heuristics**: typosquatted system processes (`svch0st.exe`), double extensions, non-ASCII homoglyphs, execution from temp/public directories, UNC paths

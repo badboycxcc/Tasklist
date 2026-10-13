@@ -5,7 +5,7 @@
 
 > An online process-list analyzer for pentest recon, asset inventory and incident response — bilingual (中文 / English). Paste `tasklist` / `ps aux` / NetExec output to identify AV/EDR, browsers, remote tools, databases, web services and more.
 
-🌐 线上地址 / Live：<https://tasklist.cxaqhq.cn> · 📦 仓库 / Repo：<https://github.com/badboycxcc/Tasklist>
+🌐 线上地址 / Live：<https://tasklist.cxaqhq.cn> · 📦 仓库 / Repo：<https://github.com/badboycxcc/Tasklist> · 🧾 变更记录 / Changelog：[CHANGELOG.md](./CHANGELOG.md)
 
 ---
 
@@ -108,6 +108,7 @@ tasklist/
 │       └── app.js             # UI 渲染与报告导出
 ├── test/
 │   └── selftest.js            # Node 自测脚本(含双语覆盖率校验)
+├── CHANGELOG.md               # 变更记录
 └── README.md
 ```
 
@@ -128,11 +129,10 @@ tasklist/
 
 ## 🧾 变更记录
 
-| 日期 | 变更 |
-| --- | --- |
-| 2026-10-13 | 签名库扩充至 500+：McAfee/Trellix（ENS/Agent/DLP/Policy Auditor/**XClient**）、Microsoft Exchange 全套角色组件、IIS/MSMQ/故障转移群集、Citrix Workspace、DameWare、SCCM 远程控制、VMware Tools/VMRC/Remote MKS、Windows 内置组件（LockApp/小组件/ShellHost 等）、Realtek/Waves/Intelligo 音频、Intel IPF/PresentMon、Elastic OTel Collector、osquery 扩展、Adobe/Cisco Webex 等 |
-| 2026-10-13 | 解析器：支持 `tasklist /svc` 服务列；支持 `tasklist` 25 字符名称截断匹配；修复截断列 `<名称> <PID> N/A` 把 `N/A` 误判为进程 `A` |
-| 2026-10-08 | 新增 Palo Alto Cortex XDR 全组件、SQL Server 全套组件、Windows 内置组件（LogonUI/AggregatorHost 等）、GLPI Agent 等签名 |
+完整历史见 **[CHANGELOG.md](./CHANGELOG.md)**。近期要点：
+
+- **2026-10-13**：签名库扩充至 **500+**（McAfee/Trellix 含 XClient、Exchange 全套角色组件、Citrix/DameWare/SCCM、VMware VMRC、Windows 内置组件、Realtek/Waves/Intelligo 音频、Intel IPF/PresentMon、Elastic OTel Collector 等）；解析器支持 `tasklist /svc` 服务列与 25 字符名称截断匹配
+- **2026-10-08**：新增 Cortex XDR 全组件、SQL Server 组件、Windows 内置组件、GLPI Agent
 
 ## 🎨 宣传素材
 
@@ -157,6 +157,8 @@ tasklist/
 - **Host profiling** and **report export** (Markdown / JSON / TXT), 100% client-side, offline-ready
 
 Deploy: push this folder to <https://github.com/badboycxcc/Tasklist>, enable Pages (`main` / root), set the custom domain `tasklist.cxaqhq.cn` (the `CNAME` file is included) and add a DNS record: `CNAME  tasklist → badboycxcc.github.io`.
+
+**Changelog**: see [CHANGELOG.md](./CHANGELOG.md).
 
 ## ⚠️ 免责声明
 

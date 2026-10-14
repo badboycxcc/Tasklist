@@ -127,6 +127,13 @@ tasklist/
 - 英文翻译：在 `assets/js/signatures.en.js` 中补一条 `"类别|名称": "英文描述"`；
   若中文名称本身需要英文化，用 `{ name: "English Name", desc: "..." }`；缺失时会回退显示中文描述
 
+### ⚠️ 发版时记得更新资源版本号（缓存）
+
+GitHub Pages 对 JS/CSS 设置了较长缓存（`max-age=14400`，约 4 小时），浏览器可能因此继续使用旧脚本。
+`index.html` 中的 `<script>` / `<link>` 均带有版本查询串（当前 `?v=1.3.0`）。
+**每次修改 `assets/` 下的 JS/CSS 后，请把 `index.html` 中所有 `?v=` 统一 +1（或改为新版本号）**，
+这样浏览器会立即拉取新文件，避免"改了但页面没变"。
+
 ## 🧾 变更记录
 
 完整历史见 **[CHANGELOG.md](./CHANGELOG.md)**。近期要点：

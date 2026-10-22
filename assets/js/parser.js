@@ -69,6 +69,7 @@
     var winScore = 0, nixScore = 0;
 
     if (/映像名称|Image Name|内存使用|Mem Usage|会话名|Session Name/i.test(t)) winScore += 3;
+    if (/SERVICE_NAME\s*[:：]|Status\s+Name\s+DisplayName/i.test(t)) winScore += 4;
     var exeCount = (t.match(/\.exe\b/gi) || []).length;
     if (exeCount >= 5) winScore += 2;
     else if (exeCount >= 1) winScore += 1;
@@ -87,6 +88,8 @@
   /* ---------- 格式识别 ---------- */
   function detectMode(lines) {
     var text = lines.join("\n");
+    if (/^\s*SERVICE_NAME\s*[:：]/mi.test(text)) return "win-sc";
+    if (/^\s*Status\s+Name\s+DisplayName\s*$/mi.test(text)) return "win-svc-table";
     if (/映像名称\s*[:：]\s*\S|Image Name\s*:\s*\S/i.test(text)) return "win-list";
     if (/^\s*"[^"]+","\d+"/m.test(text)) return "win-csv";
     if (/ProcessName/.test(text) && /Handles/.test(text)) return "win-ps";
@@ -156,6 +159,26 @@
   var WIN_ROW_NA_RE = /^\s*(.+?)\s+([\d,]+)\s+(.*?)\s*N\s*\/\s*A\s*$/i;
   /* tasklist /svc: "<名称> <PID> <服务列表>"(服务列非 N/A 时) */
   var WIN_SVC_ROW_RE = /^\s*(.+?)\s+([\d,]+)\s+([A-Za-z][A-Za-z0-9_.+-]*(?:\s*,\s*[A-Za-z][A-Za-z0-9_.+-]*)*)\s*$/;
+
+  /* sc query / sc queryex: 只取 SERVICE_NAME 行(其余 TYPE/STATE/DISPLAY_NAME 为属性) */
+  function parseWinSc(lines) {
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var m = lines[i].match(/^\s*SERVICE_NAME\s*[:：]\s*(\S.*?)\s*$/i);
+      if (m) out.push({ raw: m[1], pid: null, session: null, mem: null, cmd: null });
+    }
+    return out;
+  }
+
+  /* PowerShell Get-Service 表格: <Status> <Name> <DisplayName> */
+  function parseWinSvcTable(lines) {
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var m = lines[i].match(/^\s*(?:Running|Stopped|Paused|StartPending|StopPending|ContinuePending|PausePending)\s+(\S+)\s+\S.*$/i);
+      if (m) out.push({ raw: m[1], pid: null, session: null, mem: null, cmd: null });
+    }
+    return out;
+  }
 
   function parseWinTable(lines) {
     var out = [];
@@ -384,7 +407,9 @@
     var entries = [];
 
     try {
-      if (mode === "win-list") entries = parseWinList(lines);
+      if (mode === "win-sc") entries = parseWinSc(lines);
+      else if (mode === "win-svc-table") entries = parseWinSvcTable(lines);
+      else if (mode === "win-list") entries = parseWinList(lines);
       else if (mode === "win-csv") entries = parseWinCsv(lines);
       else if (mode === "win-ps") entries = parseWinPs(lines);
       else if (mode === "win-table") entries = parseWinTable(lines);

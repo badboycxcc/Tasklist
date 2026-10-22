@@ -15,6 +15,7 @@
   - Windows：`tasklist` 默认表格 / `tasklist /fo csv` / `tasklist /fo list` / PowerShell `Get-Process`
   - Linux：`ps aux` / `ps -ef` / `top -bn1`
   - `tasklist /svc`：服务列里的服务名不会被当成进程，`N/A` 占位符也不会被误判成进程名 `A`
+  - Windows 服务名清单（`sc query` / 服务列表）：160+ 个内置服务名会归入「Windows 系统服务(服务名)」；`Sense`(Defender for Endpoint)、`W3SVC`(IIS)、`MSMQ`、`TermService`(RDP)、`VSS`、`ssh-agent` 等服务名会给出具体归属
   - 名称截断容错：`tasklist` 会把超长进程名截断为 25 字符（如 `StartMenuExperienceHost.e`、`Microsoft.AAD.BrokerPlugi`、`elastic-otel-collector.ex`），解析器仍能正确匹配
   - 远程执行工具输出：NetExec / CrackMapExec（`nxc ... -x "tasklist"` 等）日志会自动剥离 `[协议 IP 端口 主机名]` 前缀并丢弃 `[+]` 状态行
   - 兜底：一行一个进程名，或简单的“名称 PID”列表
@@ -130,7 +131,7 @@ tasklist/
 ### ⚠️ 发版时记得更新资源版本号（缓存）
 
 GitHub Pages 对 JS/CSS 设置了较长缓存（`max-age=14400`，约 4 小时），浏览器可能因此继续使用旧脚本。
-`index.html` 中的 `<script>` / `<link>` 均带有版本查询串（当前 `?v=1.3.0`）。
+`index.html` 中的 `<script>` / `<link>` 均带有版本查询串（当前 `?v=1.4.0`）。
 **每次修改 `assets/` 下的 JS/CSS 后，请把 `index.html` 中所有 `?v=` 统一 +1（或改为新版本号）**，
 这样浏览器会立即拉取新文件，避免"改了但页面没变"。
 
@@ -138,6 +139,7 @@ GitHub Pages 对 JS/CSS 设置了较长缓存（`max-age=14400`，约 4 小时�
 
 完整历史见 **[CHANGELOG.md](./CHANGELOG.md)**。近期要点：
 
+- **2026-10-22**：新增 160+ Windows 内置服务名识别（`sc query` / 服务清单），`Sense`/`W3SVC`/`MSMQ`/`TermService`/`VSS`/`ssh-agent` 等服务名给出具体归属；Elastic Agent / EDOT 归入终端防护（EDR）；补充 Graylog Sidecar、Forefront AD 连接器、perfmon、ESET `eguiProxy`
 - **2026-10-13**：签名库扩充至 **500+**（McAfee/Trellix 含 XClient、Exchange 全套角色组件、Citrix/DameWare/SCCM、VMware VMRC、Windows 内置组件、Realtek/Waves/Intelligo 音频、Intel IPF/PresentMon、Elastic OTel Collector 等）；解析器支持 `tasklist /svc` 服务列与 25 字符名称截断匹配
 - **2026-10-08**：新增 Cortex XDR 全组件、SQL Server 组件、Windows 内置组件、GLPI Agent
 

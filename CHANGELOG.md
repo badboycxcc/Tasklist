@@ -3,6 +3,21 @@
 本文件记录 **TaskList Inspector** 的重要变更，格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 日期为提交日期；本项目尚未打 tag，条目按时间倒序排列。
 
+## 2026-10-22
+
+### 新增
+
+- **Windows 服务名识别**：支持直接粘贴 `sc query` / 服务清单。160+ 个 Windows 内置服务名（`DcomLaunch`、`Appinfo`、`fdPHost`、`RSoPProv`、`vmic*` 等）归入「Windows 系统服务(服务名)」，不再显示为未识别进程
+- **新增输入格式**：`sc query` / `sc queryex` 输出（只取 `SERVICE_NAME`，忽略 `DISPLAY_NAME`/`TYPE`/`STATE` 属性行）与 PowerShell `Get-Service` 表格（只取 Name 列），避免把属性值当成进程名
+- 服务名专项归属：`Sense` → Defender for Endpoint、`W3SVC`/`WAS`/`IISADMIN`/`AppHostSvc` → IIS、`MSMQ` → MSMQ、`SNMPTRAP` → SNMP、`TermService`/`SessionEnv`/`UmRdpService` → RDP（画像提示 3389）、`VSS`/`VSSVC` → 卷影复制、`ssh-agent` → OpenSSH 认证代理
+- 补充签名：Graylog Sidecar（含 `graylog-collector-*` 前缀）、Forefront AD 连接器、`perfmon.exe`、ESET `eguiProxy`
+
+### 修复
+
+- 分类：`elastic-otel-collector`（EDOT）由「运维 / 监控」改归**终端安全 / EDR**，与 Elastic Defend 一并计入「终端防护」画像
+- 分类：`elastic-agent.exe` 由「运维 / 监控」改归**终端安全 / EDR**（部署 Elastic Defend 时即承载终端防护）
+- 缓存：`index.html` 资源版本号提升至 `?v=1.4.0`
+
 ## 2026-10-13
 
 ### 新增

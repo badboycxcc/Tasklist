@@ -63,7 +63,7 @@
   }
 
   var PLATFORM_LABEL = { w: "Windows", l: "Linux / Unix" };
-  var MODE_KEYS = ["win-table", "win-csv", "win-list", "win-ps", "nix-aux", "nix-ef", "nix-top", "generic"];
+  var MODE_KEYS = ["win-table", "win-csv", "win-list", "win-ps", "win-sc", "win-svc-table", "nix-aux", "nix-ef", "nix-top", "generic"];
 
   function platformLabel(p) { return p ? PLATFORM_LABEL[p] : T("st.undetermined"); }
   function modeLabel(m) { return MODE_KEYS.indexOf(m) !== -1 ? T("mode." + m) : m; }

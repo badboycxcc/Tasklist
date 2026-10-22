@@ -261,7 +261,7 @@ assert(newRes.findings.remote.some(function (f) { return f.name === "Citrix Work
 assert(newRes.findings.im.some(function (f) { return f.name === "Cisco Webex"; }), "识别出 Cisco Webex (webexhost)");
 assert(newRes.findings.vpn.some(function (f) { return f.name.indexOf("Secure Client") !== -1; }), "识别出 Cisco Secure Client (csc_ui)");
 assert(newRes.findings.ops.some(function (f) { return f.name === "osquery"; }), "识别出 osquery 扩展 (osquery-extension)");
-assert(newRes.findings.ops.some(function (f) { return f.name.indexOf("Elastic OTel") !== -1; }), "识别出 Elastic OTel Collector (截断名)");
+assert(newRes.findings.av.some(function (f) { return f.name.indexOf("Elastic OTel") !== -1; }), "识别出 Elastic OTel Collector (截断名, 归类 EDR)");
 assert(newRes.findings.system.some(function (f) { return f.name.indexOf("Memory Compression") !== -1; }), "识别出 Memory Compression");
 assert(newRes.findings.update.some(function (f) { return f.name.indexOf("MoUsoCoreWorker") !== -1; }), "识别出 Windows 更新工作进程");
 assert(newRes.findings.sysutil.some(function (f) { return f.name.indexOf("ActivClient") !== -1; }), "识别出截断名的 ActivClient 智能卡代理");
@@ -304,6 +304,55 @@ var hostHeader = P.parse([
   "nginx"
 ].join("\n"), null);
 assert(hostHeader.entries.every(function (e) { return e.norm.indexOf("afrimsthamaagt") === -1; }), "带主机名前缀的表头行不产生伪进程 (实际: " + hostHeader.entries.map(function (e) { return e.raw; }).join(", ") + ")");
+
+/* 6i. Windows 服务名(sc query / 服务列表)识别 */
+console.log("\n== Windows 服务名识别 ==");
+var svcList = [
+  "DcomLaunch", "Appinfo", "AJRouter", "DiagTrack",
+  "Sense", "W3SVC", "MSMQ", "TermService", "VSS", "ssh-agent",
+  "graylog-collector-filebeat-6aa2a385c107a22b4868c796"
+].join("\n");
+var svcListRes = A.analyze(P.parse(svcList, "w"));
+assert(svcListRes.unresolved.length === 0, "服务名列表全部识别 (实际未识别: " + svcListRes.unresolved.length + ")");
+assert(svcListRes.findings.system.some(function (f) { return f.name === "Windows 系统服务(服务名)"; }), "Windows 内置服务名归为系统服务");
+assert(svcListRes.findings.av.some(function (f) { return f.name === "Microsoft Defender for Endpoint"; }), "服务名 Sense 识别为 Defender for Endpoint");
+assert(svcListRes.findings.web.some(function (f) { return f.name === "IIS 服务 (W3SVC/WAS)"; }), "服务名 W3SVC 识别为 IIS");
+assert(svcListRes.findings.infra.some(function (f) { return f.name === "Microsoft 消息队列 (MSMQ)"; }), "服务名 MSMQ 识别为 MSMQ");
+assert(svcListRes.findings.backup.some(function (f) { return f.name === "卷影复制服务 (VSS)"; }), "服务名 VSS 识别为卷影复制");
+assert(svcListRes.findings.remote.some(function (f) { return f.name.indexOf("ssh-agent") !== -1; }), "服务名 ssh-agent 识别为 OpenSSH 认证代理");
+assert(svcListRes.findings.ops.some(function (f) { return f.name === "Graylog Sidecar"; }), "前缀识别 Graylog Sidecar 托管的采集器");
+assert(svcListRes.profile.some(function (l) { return l.indexOf("RDP") !== -1; }), "画像提示 RDP 服务 (TermService)");
+
+/* 6i-2. sc query / Get-Service 输出只取服务名 */
+var scParsed = P.parse([
+  "SERVICE_NAME: AJRouter",
+  "DISPLAY_NAME: Assigned Access Manager Service",
+  "        TYPE               : 20  WIN32_SHARE_PROCESS",
+  "        STATE              : 4  RUNNING",
+  "",
+  "SERVICE_NAME: W3SVC",
+  "DISPLAY_NAME: World Wide Web Publishing Service"
+].join("\n"), null);
+assert(scParsed.mode === "win-sc", "识别 sc query 输出 (实际: " + scParsed.mode + ")");
+assert(scParsed.entries.length === 2, "sc query 仅取 SERVICE_NAME 行 (实际: " + scParsed.entries.length + ")");
+assert(scParsed.entries.every(function (e) { return e.norm !== "type" && e.norm !== "state" && e.norm !== "assigned"; }), "sc query 属性行不产生伪进程");
+assert(A.analyze(scParsed).unresolved.length === 0, "sc query 服务名全部识别");
+
+var gsParsed = P.parse([
+  "Status   Name               DisplayName",
+  "------   ----               -----------",
+  "Running  AJRouter           Assigned Access Manager Service",
+  "Stopped  MSMQ               Message Queuing"
+].join("\n"), null);
+assert(gsParsed.mode === "win-svc-table", "识别 Get-Service 表格 (实际: " + gsParsed.mode + ")");
+assert(gsParsed.entries.length === 2, "Get-Service 仅取 Name 列 (实际: " + gsParsed.entries.length + ")");
+assert(A.analyze(gsParsed).findings.infra.some(function (f) { return f.name === "Microsoft 消息队列 (MSMQ)"; }), "Get-Service 表格识别出 MSMQ");
+
+/* 6j. Elastic Agent 归入终端防护 (EDR) */
+console.log("\n== Elastic Agent 分类 ==");
+var eaRes = A.analyze(P.parse("elastic-agent.exe 67500", "w"));
+assert(eaRes.findings.av.some(function (f) { return f.name === "Elastic Agent"; }), "Elastic Agent 归类终端防护 (EDR)");
+assert(!(eaRes.findings.ops || []).some(function (f) { return f.name === "Elastic Agent"; }), "Elastic Agent 不再归入运维采集");
 
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");

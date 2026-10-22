@@ -324,7 +324,7 @@
     if (hasAny(["ccmexec"]) || hasAny(["sssd", "winbindd", "krb5kdc", "kadmind"])) {
       lines.push(T("pf.domain"));
     }
-    if (hasAny(["rdpclip", "rdpinit", "xrdp"])) lines.push(T("pf.rdp"));
+    if (hasAny(["rdpclip", "rdpinit", "xrdp", "termservice", "sessionenv", "umrdpservice"])) lines.push(T("pf.rdp"));
     if (hasAny(["wsmprovhost"])) lines.push(T("pf.winrm"));
 
     var guest = hasAny(["vmtoolsd", "vmtools", "qemu-ga", "vboxservice", "vboxsvc"]);

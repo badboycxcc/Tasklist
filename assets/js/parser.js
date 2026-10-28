@@ -360,6 +360,13 @@
       if (!line.trim() || /=====/.test(line)) continue;
       // 表头行(可能带主机名前缀)不是进程
       if (/(映像名称|Image Name|内存使用|Mem Usage)/i.test(line)) continue;
+      // 整行即一个进程名(名称含空格, 如 "WD Discovery.exe" / "NVIDIA Web Helper.exe"), 允许末尾带一个 PID
+      var bare = line.trim().replace(/^["',]+|["',]+$/g, "");
+      var bareM = bare.match(/^([A-Za-z][\w .+()\-]*\.(?:exe|scr|com))(?:\s+(\d{1,7}))?(?:\s*[×x]\s*(\d+))?$/i);
+      if (bareM) {
+        out.push({ raw: bareM[1], pid: bareM[2] || null, session: null, mem: null, cmd: bare });
+        continue;
+      }
       var t = line.trim().split(/\s+/);
       var best = null, bestScore = 0, bestIdx = -1;
       for (var j = 0; j < t.length; j++) {

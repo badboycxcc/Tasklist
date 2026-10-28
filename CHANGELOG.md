@@ -3,6 +3,25 @@
 本文件记录 **TaskList Inspector** 的重要变更，格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 日期为提交日期；本项目尚未打 tag，条目按时间倒序排列。
 
+## 2026-10-28
+
+### 新增
+
+- **补齐一批桌面/驱动/接入类进程的识别**（此前全部落入「未识别」）：
+  - 终端防护：`MpDefenderCoreService` / `DefenderSessionHelper` / `DefenderAiPlatformHost` 并入 Windows Defender；McAfee Security Scan Plus（`SSScheduler` / `McUICnt`）、Lavasoft Web Companion
+  - VPN / 远程接入：Pulse Secure（Ivanti Secure Access）、OpenVPN Connect 组件（`agent_ovpnconnect_*` / `capiws` / `ovpnhelper_service`）、FortiClient 组件（`FortiSSLVPNdaemon` / `FortiSettings` / `FortiVPN` / `FortiTray` / `FCDBLog`）、LogMeIn Hamachi、SonicWall `SnwlVpn`、Sophos Connect（`charon-svc`）、LogMeIn（`LMIGuardianSvc`）
+  - 虚拟化：Hyper-V `vmms` / `vmcompute`、VMware USB Arbitration Service
+  - Windows 内置：`dasHost`、`LsaIso`（Credential Guard）、`WLanext`、`IpOverUsbSvc`、`UserOOBEBroker`
+  - 厂商组件 / 工具：NVIDIA 容器与遥测（`NVDisplay.Container` / `nvcontainer` / `NvTelemetryContainer`）、GeForce Experience Web Helper、ASUS GPU Tweak、Kyocera `KDService`、Intel `OneApp.IGCC.WinService`、WD Discovery / WD Sync、Opera 浏览器助手、TortoiseSVN、Greenshot、`Video.UI`、`.NET ngen`；`jucheck` 并入 Java 更新程序
+  - 归属未公开但仍单独归类（不再计入未识别，提示按路径与签名确认）：`kdd.exe`、`scvpn.exe`、`slservice.exe`、`gentask.exe`、通用 `scheduler.exe`
+- 签名库增至 **547 条**
+
+### 修复
+
+- 解析器：兜底格式支持**含空格的进程名**（`WD Discovery.exe`、`NVIDIA Web Helper.exe`），不再被截断成 `Discovery.exe` / `Helper.exe`
+- 解析器：支持粘贴界面芯片文本中的 `名称 ×N` 计数后缀（如 `WD Discovery.exe ×4`）与 `名称 PID` 行
+- 缓存：`index.html` 资源版本号提升至 `?v=1.5.0`
+
 ## 2026-10-22
 
 ### 新增

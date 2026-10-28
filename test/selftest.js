@@ -354,6 +354,38 @@ var eaRes = A.analyze(P.parse("elastic-agent.exe 67500", "w"));
 assert(eaRes.findings.av.some(function (f) { return f.name === "Elastic Agent"; }), "Elastic Agent 归类终端防护 (EDR)");
 assert(!(eaRes.findings.ops || []).some(function (f) { return f.name === "Elastic Agent"; }), "Elastic Agent 不再归入运维采集");
 
+/* 6k. 含空格的进程名(兜底格式) + 桌面/厂商组件 */
+console.log("\n== 含空格进程名与厂商组件 ==");
+var chipText = [
+  "WD Discovery.exe ×4",
+  "NVIDIA Web Helper.exe",
+  "PulseSecureService.exe ×2",
+  "MpDefenderCoreService.exe",
+  "FortiSSLVPNdaemon.exe",
+  "agent_ovpnconnect_1647517.exe",
+  "OneApp.IGCC.WinService.exe",
+  "Lavasoft.WCAssistant.WinService.exe",
+  "vmware-usbarbitrator64.exe",
+  "charon-svc.exe",
+  "SSScheduler.exe",
+  "jucheck.exe",
+  "ngen.exe",
+  "kdd.exe"
+].join("\n");
+var chipParsed = P.parse(chipText, "w");
+assert(chipParsed.entries.length === 14, "芯片格式逐行解析出 14 条 (实际: " + chipParsed.entries.length + ")");
+assert(chipParsed.entries.some(function (e) { return e.norm === "wd discovery"; }), "含空格名称完整保留 (WD Discovery)");
+assert(chipParsed.entries.some(function (e) { return e.norm === "nvidia web helper"; }), "含空格名称完整保留 (NVIDIA Web Helper)");
+assert(chipParsed.entries.every(function (e) { return e.raw.indexOf("×") === -1; }), "计数后缀 ×N 未混入进程名");
+assert(!chipParsed.entries.some(function (e) { return e.raw === "Discovery.exe" || e.raw === "Helper.exe"; }), "含空格名称未被截断为最后一个词");
+var chipRes = A.analyze(chipParsed);
+assert(chipRes.unresolved.length === 0, "桌面/厂商组件全部识别 (实际未识别: " + chipRes.unresolved.length + ")");
+assert(chipRes.findings.backup.some(function (f) { return f.name.indexOf("WD Discovery") !== -1; }), "识别出 WD Discovery (西部数据)");
+assert(chipRes.findings.vpn.some(function (f) { return f.name === "OpenVPN Connect 组件"; }), "识别出 OpenVPN Connect 组件 (agent_ovpnconnect)");
+assert(chipRes.findings.vpn.some(function (f) { return f.name === "Sophos Connect (IPsec VPN)"; }), "识别出 Sophos Connect (charon-svc)");
+assert(chipRes.findings.av.some(function (f) { return f.name === "McAfee Security Scan Plus"; }), "识别出 McAfee Security Scan Plus (SSScheduler)");
+assert(chipRes.findings.vm.some(function (f) { return f.name.indexOf("USB 仲裁") !== -1; }), "识别出 VMware USB 仲裁服务");
+
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");
 assert(P.cleanName("N/A") === "", "N/A 占位符被清洗为空 (不产生伪进程 A)");

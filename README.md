@@ -139,6 +139,7 @@ GitHub Pages 对 JS/CSS 设置了较长缓存（`max-age=14400`，约 4 小时�
 
 完整历史见 **[CHANGELOG.md](./CHANGELOG.md)**。近期要点：
 
+- **2026-10-28**：补齐 48 个桌面/驱动/接入类进程（Windows Defender 组件、McAfee Scan Plus、OpenVPN Connect / FortiClient / Pulse Secure / Hamachi / SonicWall / Sophos Connect、Hyper-V `vmms`/`vmcompute`、NVIDIA / WD Discovery / Kyocera / ASUS GPU Tweak 等）；兜底解析支持含空格进程名与 `名称 ×N` 计数后缀
 - **2026-10-22**：新增 160+ Windows 内置服务名识别（`sc query` / 服务清单），`Sense`/`W3SVC`/`MSMQ`/`TermService`/`VSS`/`ssh-agent` 等服务名给出具体归属；Elastic Agent / EDOT 归入终端防护（EDR）；补充 Graylog Sidecar、Forefront AD 连接器、perfmon、ESET `eguiProxy`
 - **2026-10-13**：签名库扩充至 **500+**（McAfee/Trellix 含 XClient、Exchange 全套角色组件、Citrix/DameWare/SCCM、VMware VMRC、Windows 内置组件、Realtek/Waves/Intelligo 音频、Intel IPF/PresentMon、Elastic OTel Collector 等）；解析器支持 `tasklist /svc` 服务列与 25 字符名称截断匹配
 - **2026-10-08**：新增 Cortex XDR 全组件、SQL Server 组件、Windows 内置组件、GLPI Agent

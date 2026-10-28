@@ -56,6 +56,7 @@
     { match: ["firefox"], prefix: true, name: "Mozilla Firefox", vendor: "Mozilla", cat: "browser", os: "b", desc: "火狐浏览器" },
     { match: ["iexplore"], name: "Internet Explorer", vendor: "Microsoft", cat: "browser", os: "w", desc: "IE 浏览器(老旧系统常见)" },
     { match: ["opera"], name: "Opera", vendor: "Opera", cat: "browser", os: "b", desc: "Opera 浏览器" },
+    { match: ["browser_assistant"], name: "Opera 浏览器助手 (browser_assistant)", vendor: "Opera", cat: "browser", os: "w", desc: "Opera/Opera GX 浏览器助手(默认浏览器检测与推广组件, 常驻用户 AppData 目录)" },
     { match: ["brave"], name: "Brave", vendor: "Brave", cat: "browser", os: "b", desc: "Brave 浏览器" },
     { match: ["vivaldi"], name: "Vivaldi", vendor: "Vivaldi", cat: "browser", os: "b", desc: "Vivaldi 浏览器" },
     { match: ["360se", "360chrome"], prefix: true, name: "360 浏览器", vendor: "奇虎 360", cat: "browser", os: "w", desc: "360 安全/极速浏览器" },
@@ -67,7 +68,7 @@
     { match: ["liebao"], name: "猎豹浏览器", vendor: "金山", cat: "browser", os: "w", desc: "猎豹浏览器" },
 
     /* ---------- 终端安全 / AV / EDR (Windows) ---------- */
-    { match: ["msmpeng", "mpdefendercore", "mpcmdrun", "nissrv"], name: "Windows Defender", vendor: "Microsoft", cat: "av", os: "w", desc: "微软内置反恶意软件服务/网络检查" },
+    { match: ["msmpeng", "mpdefendercore", "mpdefendercoreservice", "defendersessionhelper", "defenderaiplatformhost", "mpcmdrun", "nissrv"], name: "Windows Defender", vendor: "Microsoft", cat: "av", os: "w", desc: "微软内置反恶意软件服务/网络检查(含 Defender Core 服务、AI 平台宿主与会话辅助组件)" },
     { match: ["mssense", "senseir", "sense"], name: "Microsoft Defender for Endpoint", vendor: "Microsoft", cat: "av", os: "w", desc: "微软企业级 EDR 代理(含服务名 Sense)" },
     { match: ["securityhealthservice", "securityhealthsystray"], name: "Windows 安全中心", vendor: "Microsoft", cat: "av", os: "w", desc: "Windows 安全中心界面/服务" },
     { match: ["avp", "avpui", "kavfs"], name: "Kaspersky", vendor: "卡巴斯基", cat: "av", os: "w", desc: "卡巴斯基安全软件/企业版" },
@@ -78,6 +79,8 @@
     { match: ["mcshield", "mfemms", "masvc", "mfevtps"], name: "McAfee / Trellix", vendor: "Trellix", cat: "av", os: "w", desc: "McAfee/Trellix 终端防护组件" },
     { match: ["mfeesp", "mfefw", "mfehcs", "mfeatp", "mfetp", "mfeensppl", "mfemactl", "mfeconsole"], name: "McAfee/Trellix Endpoint Security (ENS)", vendor: "Trellix", cat: "av", os: "w", desc: "ENS 端点安全平台/防火墙/威胁防御/自适应威胁防护组件" },
     { match: ["macmnsvc", "macompatsvc", "mctray", "updaterui"], name: "McAfee/Trellix Agent", vendor: "Trellix", cat: "av", os: "w", desc: "McAfee/Trellix Agent 代理(Common Services/兼容服务/托盘/AutoUpdate)" },
+    { match: ["ssscheduler", "mcuicnt"], name: "McAfee Security Scan Plus", vendor: "McAfee", cat: "av", os: "w", desc: "McAfee Security Scan/Scan Plus(常随第三方安装包捆绑的免费扫描工具; ssscheduler 定时扫描, mcuicnt 为界面宿主)" },
+    { match: ["lavasoft.wcassistant.winservice"], name: "Lavasoft Web Companion", vendor: "Lavasoft", cat: "av", os: "w", desc: "Lavasoft(Ad-Aware)Web Companion 助手服务(浏览器主页/搜索保护, 常被归类为捆绑软件)" },
     { match: ["fcag", "fcags", "fcagswd", "fcom", "fcnm", "dlpsensor", "edpa"], name: "McAfee/Trellix DLP / 移动介质保护", vendor: "Trellix", cat: "av", os: "w", desc: "数据防泄漏(FRP/DLP)端点组件(文件与移动介质保护)" },
     { match: ["auditmanagerservice", "enginemain", "fimcli"], name: "McAfee/Trellix Policy Auditor / 应用控制", vendor: "Trellix", cat: "av", os: "w", desc: "合规审计/应用控制(Solidcore)代理" },
     { match: ["xclient"], prefix: true, name: "Trellix XClient 终端代理", vendor: "Trellix", cat: "av", os: "w", desc: "Trellix 端点代理 XClient 组件(EDR/EDRF; xclientppl 为受保护进程组件)" },
@@ -121,6 +124,7 @@
 
     /* ---------- 远程控制 ---------- */
     { match: ["teamviewer"], prefix: true, name: "TeamViewer", vendor: "TeamViewer", cat: "remote", os: "b", desc: "TeamViewer 远程控制(含服务端组件)" },
+    { match: ["lmiguardian", "logmein"], prefix: true, name: "LogMeIn", vendor: "LogMeIn", cat: "remote", os: "w", desc: "LogMeIn Pro/Central 远程访问组件(Guardian 服务/托盘), 提示存在远程维护通道" },
     { match: ["sunloginclient", "sunloginservice"], prefix: true, name: "向日葵远程控制", vendor: "Oray", cat: "remote", os: "w", desc: "向日葵远程控制软件" },
     { match: ["awesun"], prefix: true, name: "AweSun (向日葵国际版)", vendor: "Oray", cat: "remote", os: "w", desc: "向日葵远程控制" },
     { match: ["todesk"], prefix: true, name: "ToDesk", vendor: "ToDesk", cat: "remote", os: "w", desc: "ToDesk 远程控制软件" },
@@ -150,7 +154,7 @@
     /* ---------- VPN / 零信任 ---------- */
     { match: ["vpnagent", "vpnui", "csc_ui"], name: "Cisco AnyConnect / Secure Client", vendor: "Cisco", cat: "vpn", os: "w", desc: "思科 SSL VPN / Secure Client 客户端(含 csc_ui 界面)" },
     { match: ["globalprotect", "pangpa", "pangps"], name: "Palo Alto GlobalProtect", vendor: "Palo Alto", cat: "vpn", os: "w", desc: "企业 SSL VPN 客户端" },
-    { match: ["forticlient", "fcconfig"], name: "FortiClient", vendor: "Fortinet", cat: "vpn", os: "w", desc: "飞塔 VPN/终端客户端" },
+    { match: ["forticlient", "fcconfig", "fortisslvpndaemon", "fortisettings", "fortivpn", "fortitray", "fcdblog"], name: "FortiClient", vendor: "Fortinet", cat: "vpn", os: "w", desc: "飞塔 VPN/终端客户端(含 SSL VPN 守护进程、设置/托盘界面与日志组件 FCDBLog)" },
     { match: ["easyconnect"], name: "深信服 EasyConnect", vendor: "深信服", cat: "vpn", os: "w", desc: "深信服 SSL VPN 客户端" },
     { match: ["atrusttray", "atrust"], name: "深信服 aTrust", vendor: "深信服", cat: "vpn", os: "b", desc: "深信服零信任接入客户端" },
     { match: ["openvpn"], prefix: true, name: "OpenVPN", vendor: "OpenVPN", cat: "vpn", os: "b", desc: "OpenVPN 客户端/服务端" },
@@ -160,6 +164,12 @@
     { match: ["xl2tpd"], name: "xl2tpd", vendor: "l2tp", cat: "vpn", os: "l", desc: "L2TP VPN 服务" },
     { match: ["pppd"], name: "pppd", vendor: "PPP", cat: "vpn", os: "l", desc: "PPP/VPN 拨号进程" },
     { match: ["openconnect"], name: "OpenConnect", vendor: "OpenConnect", cat: "vpn", os: "b", desc: "AnyConnect 兼容 VPN 客户端" },
+    { match: ["pulsesecureservice", "pulseui", "pulsetray"], name: "Pulse Secure / Ivanti Secure Access", vendor: "Ivanti", cat: "vpn", os: "w", desc: "Pulse Secure 桌面客户端服务(PulseSecureService 等; 原 Juniper Junos Pulse, 现 Ivanti Secure Access Client), 企业 SSL VPN 接入组件" },
+    { match: ["agent_ovpnconnect", "ovpnhelper_service", "capiws"], prefix: true, name: "OpenVPN Connect 组件", vendor: "OpenVPN", cat: "vpn", os: "w", desc: "OpenVPN Connect 客户端后台组件(agent 代理进程、capiws 本地接口服务、ovpnhelper 服务)" },
+    { match: ["hamachi"], prefix: true, name: "LogMeIn Hamachi", vendor: "LogMeIn", cat: "vpn", os: "w", desc: "Hamachi 虚拟局域网(点对点组网, 常见于远程接入/内网互联)" },
+    { match: ["snwlvpn"], name: "SonicWall VPN 客户端 (SnwlVpn)", vendor: "SonicWall", cat: "vpn", os: "w", desc: "SonicWall Global VPN / NetExtender 客户端组件(企业远程接入)" },
+    { match: ["scvpn"], name: "scvpn.exe (未确认归属)", vendor: "通用", cat: "vpn", os: "w", desc: "名称指向某 SSL VPN 客户端(SC VPN), 厂商未公开; 建议结合安装路径与数字签名确认" },
+    { match: ["charon-svc"], name: "Sophos Connect (IPsec VPN)", vendor: "Sophos", cat: "vpn", os: "w", desc: "Sophos Connect IPsec VPN 服务(基于 strongSwan charon), 企业远程接入组件" },
 
     /* ---------- 数据库 ---------- */
     { match: ["sqlservr"], name: "Microsoft SQL Server", vendor: "Microsoft", cat: "db", os: "w", desc: "MSSQL 数据库引擎" },
@@ -218,6 +228,7 @@
     { match: ["perl"], prefix: true, name: "Perl", vendor: "Perl", cat: "midware", os: "b", desc: "Perl 运行时(常见于系统脚本)" },
     { match: ["ruby"], prefix: true, name: "Ruby", vendor: "Ruby", cat: "midware", os: "b", desc: "Ruby 运行时" },
     { match: ["dotnet"], prefix: true, name: ".NET 运行时", vendor: "Microsoft", cat: "midware", os: "b", desc: ".NET 应用宿主" },
+    { match: ["ngen"], name: ".NET Native Image Generator (ngen)", vendor: "Microsoft", cat: "midware", os: "w", desc: "将 .NET 程序集预编译为本机映像(安装/更新 .NET 应用时短暂出现)" },
     { match: ["smsvchost"], name: "WCF 服务激活宿主 (SMSvcHost)", vendor: "Microsoft", cat: "midware", os: "w", desc: "WCF Net.Tcp 端口共享/监听适配器宿主(依赖 .NET)" },
     { match: ["beam.smp"], name: "Erlang VM", vendor: "Erlang", cat: "midware", os: "l", desc: "Erlang 虚拟机(RabbitMQ/EMQX 等)" },
     { match: ["rabbitmq"], prefix: true, name: "RabbitMQ", vendor: "Broadcom", cat: "midware", os: "b", desc: "消息队列服务" },
@@ -247,6 +258,9 @@
     { match: ["qemu-ga"], name: "QEMU Guest Agent", vendor: "QEMU", cat: "vm", os: "b", desc: "QEMU 客户端代理(当前系统疑似为 QEMU/KVM 虚拟机)" },
     { match: ["vmmem"], name: "vmmem", vendor: "Microsoft", cat: "vm", os: "w", desc: "虚拟机内存进程(WSL2/Hyper-V 虚拟机运行中)" },
     { match: ["vmwp"], name: "Hyper-V 虚拟机进程", vendor: "Microsoft", cat: "vm", os: "w", desc: "Hyper-V 虚拟机工作进程(本机为宿主机)" },
+    { match: ["vmms"], name: "Hyper-V 虚拟机管理服务 (vmms)", vendor: "Microsoft", cat: "vm", os: "w", desc: "Hyper-V 虚拟机管理服务(本机为虚拟化宿主机)" },
+    { match: ["vmcompute"], name: "Hyper-V 主机计算服务 (vmcompute)", vendor: "Microsoft", cat: "vm", os: "w", desc: "Hyper-V 主机计算服务(运行虚拟机/容器的计算实例)" },
+    { match: ["vmware-usbarbitrator64", "vmware-usbarbitrator"], name: "VMware USB 仲裁服务", vendor: "VMware", cat: "vm", os: "w", desc: "VMware USB Arbitration Service(将 USB 设备直通给虚拟机)" },
     { match: ["wsl", "wslhost"], prefix: false, name: "WSL", vendor: "Microsoft", cat: "vm", os: "w", desc: "Windows Subsystem for Linux" },
     { match: ["libvirtd"], name: "libvirt", vendor: "Red Hat", cat: "vm", os: "l", desc: "KVM 虚拟化管理守护进程(本机可能是宿主机)" },
     { match: ["lxd", "lxcfs"], prefix: false, name: "LXD/LXC", vendor: "Canonical", cat: "vm", os: "l", desc: "系统容器/虚拟化管理" },
@@ -256,6 +270,7 @@
     { match: ["code", "code-insiders"], prefix: false, name: "Visual Studio Code", vendor: "Microsoft", cat: "dev", os: "b", desc: "VS Code 编辑器" },
     { match: ["cursor"], name: "Cursor", vendor: "Anysphere", cat: "dev", os: "b", desc: "Cursor AI 编辑器" },
     { match: ["idea64", "idea", "pycharm64", "pycharm", "webstorm64", "goland64", "clion64", "rider64", "datagrip64"], name: "JetBrains IDE", vendor: "JetBrains", cat: "dev", os: "b", desc: "JetBrains 系列 IDE(IntelliJ/PyCharm/GoLand 等)" },
+    { match: ["tsvncache", "tortoisesvn", "tortoiseproc"], name: "TortoiseSVN", vendor: "TortoiseSVN", cat: "dev", os: "w", desc: "TortoiseSVN 组件(TSVNCache 状态缓存; 本机存在 SVN 工作副本)" },
     { match: ["studio64"], name: "Android Studio", vendor: "Google", cat: "dev", os: "b", desc: "安卓开发 IDE" },
     { match: ["eclipse"], name: "Eclipse", vendor: "Eclipse", cat: "dev", os: "b", desc: "Eclipse IDE" },
     { match: ["notepad++"], name: "Notepad++", vendor: "Don Ho", cat: "dev", os: "w", desc: "文本编辑器" },
@@ -323,6 +338,7 @@
     { match: ["sgtool", "sogoucloud", "pinyinup"], name: "搜狗输入法", vendor: "搜狗", cat: "sysutil", os: "w", desc: "搜狗输入法组件" },
     { match: ["notepad"], name: "记事本", vendor: "Microsoft", cat: "sysutil", os: "w", desc: "Windows 记事本" },
     { match: ["snippingtool"], name: "截图工具", vendor: "Microsoft", cat: "sysutil", os: "w", desc: "Windows 截图工具(有人正在截图)" },
+    { match: ["greenshot"], name: "Greenshot", vendor: "Greenshot", cat: "sysutil", os: "w", desc: "开源截图工具 Greenshot(常驻截图/贴图进程)" },
     { match: ["acevents", "ac.activclient"], prefix: true, name: "HID ActivClient (智能卡中间件)", vendor: "HID Global", cat: "sysutil", os: "w", desc: "ActivIdentity/HID ActivClient 组件(事件服务/智能卡代理, 存在智能卡/USB Key 登录)" },
 
     /* ---------- 办公软件 ---------- */
@@ -353,6 +369,7 @@
     /* ---------- 娱乐 / 多媒体 ---------- */
     { match: ["potplayer"], prefix: true, name: "PotPlayer", vendor: "Kakao", cat: "media", os: "w", desc: "视频播放器" },
     { match: ["vlc"], prefix: true, name: "VLC", vendor: "VideoLAN", cat: "media", os: "b", desc: "VLC 播放器" },
+    { match: ["video.ui"], name: "Video.UI.exe (电影和电视)", vendor: "Microsoft", cat: "media", os: "w", desc: "Windows「电影和电视」UWP 应用(本地/在线视频播放)" },
     { match: ["qqmusic"], prefix: true, name: "QQ 音乐", vendor: "腾讯", cat: "media", os: "w", desc: "QQ 音乐" },
     { match: ["cloudmusic"], prefix: true, name: "网易云音乐", vendor: "网易", cat: "media", os: "w", desc: "网易云音乐" },
     { match: ["kugou"], prefix: true, name: "酷狗音乐", vendor: "酷狗", cat: "media", os: "w", desc: "酷狗音乐" },
@@ -369,6 +386,7 @@
     { match: ["restic", "borg", "duplicity"], prefix: true, name: "备份工具 (restic/borg/duplicity)", vendor: "开源", cat: "backup", os: "l", desc: "Linux 备份工具" },
     { match: ["syncthing"], prefix: true, name: "Syncthing", vendor: "Syncthing", cat: "backup", os: "b", desc: "P2P 文件同步" },
     { match: ["vss", "vssvc"], name: "卷影复制服务 (VSS)", vendor: "Microsoft", cat: "backup", os: "w", desc: "Volume Shadow Copy 服务(快照/备份, 也常见于凭据提取场景)" },
+    { match: ["wd discovery", "wddiscoverymonitor", "wdsync"], name: "WD Discovery / WD Sync (西部数据)", vendor: "Western Digital", cat: "backup", os: "w", desc: "西部数据 WD Discovery/WD Sync 组件(移动硬盘与 My Cloud 的发现、挂载与文件同步)" },
 
     /* ---------- Windows 系统进程 ---------- */
     { match: ["system idle process", "idle"], name: "System Idle Process", vendor: "Microsoft", cat: "system", os: "w", desc: "系统空闲进程" },
@@ -781,12 +799,29 @@
     { match: ["winwfpmonitor"], name: "Windows 筛选平台监视器", vendor: "Microsoft", cat: "system", os: "w", desc: "WFP 网络过滤监控(Win7)" },
     { match: ["wmpnetwk"], name: "WMP 网络共享服务", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows Media Player Network Sharing" },
     { match: ["splwow64"], name: "splwow64.exe", vendor: "Microsoft", cat: "system", os: "w", desc: "32 位打印后台代理" },
+    { match: ["dashost"], name: "Device Association Framework Provider Host (dasHost)", vendor: "Microsoft", cat: "system", os: "w", desc: "设备关联框架提供程序宿主(蓝牙/USB 等设备配对与关联)" },
+    { match: ["lsaiso"], name: "LSA 隔离进程 (LsaIso)", vendor: "Microsoft", cat: "system", os: "w", desc: "凭据保护(Credential Guard)/Key Guard 的 LSA 隔离进程, 提示已启用基于虚拟化的安全" },
+    { match: ["wlanext"], name: "无线 LAN 扩展服务 (WLanext)", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 无线局域网扩展服务(本机使用 Wi-Fi)" },
+    { match: ["ipoverusbsvc"], name: "IP over USB 服务 (IpOverUsbSvc)", vendor: "Microsoft", cat: "system", os: "w", desc: "IP over USB 服务(Windows Phone/WinUSB 设备调试连接, 常见于开发机)" },
+    { match: ["useroobebroker"], name: "User OOBE Broker", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 开箱体验(OOBE)用户会话代理" },
     { match: ["tasklist"], name: "tasklist.exe", vendor: "Microsoft", cat: "shell", os: "w", desc: "任务列表命令(采集进程列表时自身产生的进程)" },
+
+    /* ---------- Windows 厂商组件 / 驱动与外设 ---------- */
+    { match: ["nvcontainer", "nvdisplay.container"], name: "NVIDIA 驱动容器服务", vendor: "NVIDIA", cat: "sysutil", os: "w", desc: "NVIDIA 容器进程(NVDisplay.Container/nvcontainer, 承载显卡驱动与控制面板服务)" },
+    { match: ["nvtelemetrycontainer"], name: "NVIDIA 遥测服务", vendor: "NVIDIA", cat: "sysutil", os: "w", desc: "NVIDIA 遥测容器服务(驱动使用数据上报, 可禁用)" },
+    { match: ["nvidia web helper"], name: "NVIDIA GeForce Experience Web Helper", vendor: "NVIDIA", cat: "sysutil", os: "w", desc: "GeForce Experience 内嵌浏览器宿主(登录/驱动下载页面)" },
+    { match: ["asgt"], name: "ASUS GPU Tweak", vendor: "华硕", cat: "sysutil", os: "w", desc: "华硕 GPU Tweak 显卡超频工具(含监控/启动组件)" },
+    { match: ["oneapp.igcc.winservice"], name: "Intel 显卡命令中心服务 (OneApp.IGCC)", vendor: "Intel", cat: "sysutil", os: "w", desc: "Intel Graphics Command Center(IGCC)后台服务, 由 OneApp 框架宿主" },
+    { match: ["kdservice"], name: "京瓷打印通知服务 (KDService)", vendor: "Kyocera", cat: "sysutil", os: "w", desc: "京瓷(Kyocera)打印/多功能一体机状态通知服务(本机装有京瓷打印驱动)" },
+    { match: ["scheduler"], name: "计划任务调度组件 (scheduler.exe)", vendor: "通用", cat: "sysutil", os: "w", desc: "第三方软件的定时调度进程(常见于 IObit Driver Booster 等), 需结合安装路径与数字签名确认归属" },
+    { match: ["kdd"], name: "kdd.exe (未确认归属)", vendor: "通用", cat: "sysutil", os: "w", desc: "未见公开归属的 KD 系列进程; 建议结合安装路径、数字签名与哈希确认" },
+    { match: ["slservice"], name: "slservice.exe (未确认归属)", vendor: "通用", cat: "sysutil", os: "w", desc: "通用 SL 服务宿主名, 厂商未公开; 建议结合安装路径与数字签名确认" },
+    { match: ["gentask"], name: "gentask.exe (未确认归属)", vendor: "通用", cat: "sysutil", os: "w", desc: "通用任务生成组件, 厂商未公开; 建议结合父进程与数字签名确认" },
 
     /* ---------- 更新组件 (Windows) ---------- */
     { match: ["googleupdate", "googlecrashhandler"], prefix: false, name: "Google 更新组件", vendor: "Google", cat: "update", os: "w", desc: "Chrome 更新/崩溃上报(提示安装了 Chrome 系产品)" },
     { match: ["microsoftedgeupdate"], prefix: true, name: "Edge 更新组件", vendor: "Microsoft", cat: "update", os: "w", desc: "Edge 更新程序" },
-    { match: ["jusched"], name: "Java 更新程序", vendor: "Oracle", cat: "update", os: "w", desc: "Java 自动更新" },
+    { match: ["jusched", "jucheck"], name: "Java 更新程序", vendor: "Oracle", cat: "update", os: "w", desc: "Java 自动更新/更新检查程序" },
     { match: ["trustedinstaller"], name: "TrustedInstaller", vendor: "Microsoft", cat: "update", os: "w", desc: "Windows 模块安装服务(系统更新中)" },
     { match: ["unsecapp"], name: "unsecapp.exe", vendor: "Microsoft", cat: "update", os: "w", desc: "WMI 事件接收进程" },
     { match: ["updateservice"], name: "UpdateService (通用更新服务)", vendor: "通用", cat: "update", os: "w", desc: "通用更新服务名(常见于 Exchange FIP-FS 内容扫描; 亦见于其他厂商), 建议按路径与签名确认" },

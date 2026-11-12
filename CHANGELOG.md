@@ -3,6 +3,17 @@
 本文件记录 **TaskList Inspector** 的重要变更，格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 日期为提交日期；本项目尚未打 tag，条目按时间倒序排列。
 
+## 2026-11-05-修正
+
+### 修复
+
+- **更正 `intimesec.exe` 的归属**：此前误标为「奇安信天擎」。实际是台湾 **InTimeSec 集时安全**（台北, 統編 94255011）的 **ITSec MDR 端点收集器**，提供 7×24 Level 4 托管检测与响应、主动威胁狩猎；官方规格为采集 Process/Network/File/Registry/DNS 事件与文件哈希，声明不采集文件内容、封包与屏幕。见 [ITSec MDR](https://intimesec.com/itsec-mdr/)、[關於 INTIMESEC](https://intimesec.com/about-itsec/)
+- **拆分同名误判**：`qaxsafe` / `tianqing` / `qaxsafeupdate` / `qaxbrowserhelper` 保留为奇安信天擎，并在描述里写明「与 InTimeSec 仅名字相似，不是同一家」
+- **`ThreatSonar` 归属明确为 TeamT5**：名称改为 `TeamT5 ThreatSonar`（台湾 TeamT5 的端点威胁狩猎/反勒索产品），并改为前缀匹配（覆盖 `ThreatSonarSvc` / `ThreatSonarAgent` 等变体）；描述注明 MDR 服务商常以它作为检测引擎，因此与 InTimeSec 收集器常同机出现
+- `intimesec` 同步改为前缀匹配（覆盖 `InTimeSecAgent` / `InTimeSecSensor` 这类命名）
+- 厂商英文映射补 `InTimeSec`、`TeamT5`、`QiAnXin`
+- 自测新增 4 项断言（厂商归属、否定旧误标、前缀变体）
+
 ## 2026-11-05
 
 ### 新增

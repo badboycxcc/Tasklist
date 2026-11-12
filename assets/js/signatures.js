@@ -839,8 +839,9 @@
     { match: ["sspservice"], name: "Sophos System Protection 服务 (SSP)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos System Protection 服务(防护策略执行与 HIPS 侧拦截)" },
     { match: ["mcsagent", "mcsclient"], name: "Sophos 管理通信组件 (MCS)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos Management Communications System 代理/客户端(与 Sophos Central 通信、上报策略与状态; 若同名进程来自其他产品, 按路径确认)" },
     { match: ["csfalconuihost"], name: "CrowdStrike Falcon UI Host", vendor: "CrowdStrike", cat: "av", os: "w", desc: "CrowdStrike Falcon 传感器界面宿主(托盘/通知, 与 csagent 服务配套)" },
-    { match: ["threatsonar"], name: "ThreatSonar 反勒索 / EDR", vendor: "TeamT5", cat: "av", os: "w", desc: "TeamT5 ThreatSonar 终端威胁狩猎与反勒索组件" },
-    { match: ["intimesec", "qaxsafe", "tianqing"], name: "奇安信天擎 客户端", vendor: "奇安信", cat: "av", os: "w", desc: "奇安信天擎(原网神 Intime)终端安全客户端进程" },
+    { match: ["threatsonar"], prefix: true, name: "TeamT5 ThreatSonar", vendor: "TeamT5", cat: "av", os: "w", desc: "台湾 TeamT5 的端点威胁狩猎/反勒索产品(ThreatSonar Anti-Ransomware); MDR 服务商常以它作为检测引擎, 与 InTimeSec 的 MDR 服务常同时出现" },
+    { match: ["intimesec"], prefix: true, name: "InTimeSec 集时安全 · ITSec MDR 端点收集器", vendor: "InTimeSec(集时安全)", cat: "av", os: "w", desc: "台湾 InTimeSec(集时安全, 台北)的托管检测与响应服务端点收集器: 7×24 采集进程/网络/文件/注册表/DNS 事件与文件哈希上报分析, 官方声明不采集文件内容、封包与屏幕; 提供 7×24 Level 4 MDR 与主动威胁狩猎" },
+    { match: ["qaxsafe", "qaxsafeupdate", "tianqing", "qaxbrowserhelper"], name: "奇安信天擎 客户端", vendor: "奇安信", cat: "av", os: "w", desc: "奇安信天擎(原网神)终端安全客户端; 注意与本列表的 InTimeSec(intimesec) 不是同一家, 仅名字相似" },
     { match: ["sophos"], prefix: true, name: "Sophos 终端防护组件", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos 系列组件兜底匹配(Sophos* 均属 Endpoint / Intercept X 家族)" },
 
     /* ---------- Windows UWP / Unistack 服务实例 ---------- */

@@ -37,7 +37,10 @@
     "百度": "Baidu",
     "金山办公": "Kingsoft Office",
     "卡巴斯基": "Kaspersky",
-    "趋势科技": "Trend Micro"
+    "趋势科技": "Trend Micro",
+    "InTimeSec(集时安全)": "InTimeSec",
+    "TeamT5": "TeamT5",
+    "奇安信": "QiAnXin"
   };
 
   /* 签名英文化: "<cat>|<中文名>" -> "desc" | { name, desc } */
@@ -725,7 +728,8 @@
     "av|Sophos System Protection 服务 (SSP)": "Sophos System Protection service (policy enforcement / HIPS)",
     "av|Sophos 管理通信组件 (MCS)": "Sophos Management Communications System agent/client talking to Sophos Central",
     "av|CrowdStrike Falcon UI Host": "CrowdStrike Falcon sensor UI host (tray / notifications, pairs with csagent)",
-    "av|ThreatSonar 反勒索 / EDR": "TeamT5 ThreatSonar endpoint hunting and anti-ransomware component",
+    "av|TeamT5 ThreatSonar": "TeamT5 (Taiwan) endpoint threat-hunting / anti-ransomware product; often used as the detection engine behind MDR services and seen alongside InTimeSec",
+    "av|InTimeSec 集时安全 · ITSec MDR 端点收集器": "Endpoint collector of InTimeSec (Taipei) managed detection & response: 24x7 collection of process/network/file/registry/DNS events and file hashes (vendor states file contents, packets and screenshots are not collected); 24x7 Level-4 MDR and proactive threat hunting",
     "av|奇安信天擎 客户端": "QiAnXin TianQing (ex-Intime) endpoint security client",
     "av|Sophos 终端防护组件": "Sophos component (catch-all prefix: every Sophos* process belongs to Endpoint / Intercept X)",
     "system|Windows UWP 服务实例 (Unistack)": "Windows Store / Unistack service instance (tasklist shows a random _xxxxx suffix, e.g. UnistoreSvc_efe21)",

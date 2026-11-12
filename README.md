@@ -21,7 +21,7 @@
   - 名称截断容错：`tasklist` 会把超长进程名截断为 25 字符（如 `StartMenuExperienceHost.e`、`Microsoft.AAD.BrokerPlugi`、`elastic-otel-collector.ex`），解析器仍能正确匹配
   - 远程执行工具输出：NetExec / CrackMapExec（`nxc ... -x "tasklist"` 等）日志会自动剥离 `[协议 IP 端口 主机名]` 前缀并丢弃 `[+]` 状态行
   - 兜底：一行一个进程名，或简单的“名称 PID”列表
-- **564 条软件签名库**：覆盖国内外杀软/EDR/XDR（火绒、360、Kaspersky、CrowdStrike、Palo Alto Cortex XDR、McAfee/Trellix（ENS/Agent/DLP/Policy Auditor/XClient）、VMware Carbon Black、Cybereason、Trellix/FireEye HX 等）、Microsoft Exchange Server 全套角色组件、IIS/MSMQ/故障转移群集、SQL Server 全套组件、Windows 内置组件、虚拟化/远程（VMware Tools/VMRC、DameWare、SCCM/Citrix 远程控制）、资产盘点 Agent（GLPI、osquery）、远程控制（TeamViewer、AnyDesk、向日葵、ToDesk…）、隧道代理（frp、ngrok…）、数据库、Web 服务、容器/编排、云厂商 Agent（阿里云/腾讯云）等
+- **564 条软件签名库**：覆盖国内外杀软/EDR/XDR（火绒、360、Kaspersky、CrowdStrike、Palo Alto Cortex XDR、InTimeSec 集时安全 MDR、TeamT5 ThreatSonar、McAfee/Trellix（ENS/Agent/DLP/Policy Auditor/XClient）、VMware Carbon Black、Cybereason、Trellix/FireEye HX 等）、Microsoft Exchange Server 全套角色组件、IIS/MSMQ/故障转移群集、SQL Server 全套组件、Windows 内置组件、虚拟化/远程（VMware Tools/VMRC、DameWare、SCCM/Citrix 远程控制）、资产盘点 Agent（GLPI、osquery）、远程控制（TeamViewer、AnyDesk、向日葵、ToDesk…）、隧道代理（frp、ngrok…）、数据库、Web 服务、容器/编排、云厂商 Agent（阿里云/腾讯云）等
 - **中英双语界面**：右上角一键切换 `中文 / EN`，识别名称、软件说明、主机画像与导出报告全部同步切换
 - **命令行关键字识别**：对 `java` / `python` 等宿主进程，扫描完整命令行识别 Burp Suite、SQLMap、Metasploit、宝塔面板等
 - **可疑启发式检测**：仿冒系统进程名（如 `svch0st.exe`、`scvhost.exe`）、双扩展名、非 ASCII 同形字、从临时/公共目录运行、UNC 路径运行

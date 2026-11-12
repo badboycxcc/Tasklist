@@ -417,7 +417,12 @@ assert(gapRes.unresolved.length === 0, "19 个进程全部识别, 无未识别 (
 assert(gapRes.findings.av.some(function (f) { return f.name === "Sophos 文件扫描器 (File Scanner)"; }), "识别 SophosFileScanner");
 assert(gapRes.findings.av.some(function (f) { return f.name === "Sophos Endpoint Defense 服务 (SED)"; }), "识别 SEDService");
 assert(gapRes.findings.av.some(function (f) { return f.name === "Sophos System Protection 服务 (SSP)"; }), "识别 SSPService");
-assert(gapRes.findings.av.some(function (f) { return f.name === "奇安信天擎 客户端"; }), "识别 intimesec(奇安信天擎)");
+assert(gapRes.findings.av.some(function (f) { return f.name.indexOf("InTimeSec") !== -1; }), "识别 intimesec(InTimeSec 集时安全 MDR 端点收集器)");
+assert(gapRes.groups.some(function (g) { return g.raw === "intimesec.exe" && g.sig.vendor === "InTimeSec(集时安全)"; }), "intimesec 厂商归属 InTimeSec(集时安全)");
+assert(gapRes.groups.some(function (g) { return g.raw === "ThreatSonar.exe" && g.sig.vendor === "TeamT5"; }), "ThreatSonar 厂商归属 TeamT5(不是奇安信)");
+assert(gapRes.groups.every(function (g) { return !(g.raw === "intimesec.exe" && /天擎/.test(g.sig.name)); }), "intimesec 不再被误标为奇安信天擎");
+var t5Prefix = A.analyze(P.parse("ThreatSonarSvc.exe\nInTimeSecAgent.exe", "w"));
+assert(t5Prefix.unresolved.length === 0, "ThreatSonar*/InTimeSec* 前缀变体也能识别");
 assert(gapRes.findings.av.some(function (f) { return f.name === "CrowdStrike Falcon UI Host"; }), "识别 CsFalconUIHost");
 assert(gapRes.findings.av.some(function (f) { return f.name.indexOf("MCS") !== -1; }), "识别 McsAgent/McsClient(Sophos MCS)");
 assert(gapRes.findings.av.some(function (f) { return f.name.indexOf("ThreatSonar") !== -1; }), "识别 ThreatSonar");

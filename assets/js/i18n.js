@@ -14,6 +14,8 @@
     zh: {
       "meta.title": "TaskList Inspector · 在线进程分析 · 目标软件识别",
       "brand.sub": "在线进程分析",
+      "nav.fscan": "fscan 解析",
+      "nav.fscanTitle": "fscan 扫描结果解析（按系统/端口/弱点分组）",
       "lang.btn": "EN",
       "lang.title": "切换到 English",
 
@@ -159,6 +161,8 @@
     en: {
       "meta.title": "TaskList Inspector · Online Process Analyzer",
       "brand.sub": "Process Analyzer",
+      "nav.fscan": "fscan parser",
+      "nav.fscanTitle": "Parse fscan results (group by OS, ports, weakness)",
       "lang.btn": "中文",
       "lang.title": "Switch to Chinese",
 

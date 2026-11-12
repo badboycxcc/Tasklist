@@ -713,6 +713,27 @@
     return tag;
   }
 
+  /* Sophos 全家桶 / EDR 组件 / UWP 实例 / 通用进程名 (2026-11) */
+  Object.assign(SIG_EN, {
+    "av|Sophos 文件扫描器 (File Scanner)": "Sophos Endpoint / Intercept X on-access file scanner",
+    "av|Sophos 网络威胁防护 (NTP)": "Sophos Network Threat Protection service (traffic-side IDS/blocking)",
+    "av|Sophos 网络过滤服务": "Sophos network filter companion service",
+    "av|Sophos 文件完整性监控 (FIM)": "Sophos Intercept X File Integrity Monitoring service",
+    "av|Sophos 端点健康服务": "Sophos endpoint health check / reporting service",
+    "av|Sophos 文件防护 (SophosFS)": "Sophos file protection / storage component shipped with the endpoint agent",
+    "av|Sophos Endpoint Defense 服务 (SED)": "Sophos Intercept X Endpoint Defense service (behaviour blocking core)",
+    "av|Sophos System Protection 服务 (SSP)": "Sophos System Protection service (policy enforcement / HIPS)",
+    "av|Sophos 管理通信组件 (MCS)": "Sophos Management Communications System agent/client talking to Sophos Central",
+    "av|CrowdStrike Falcon UI Host": "CrowdStrike Falcon sensor UI host (tray / notifications, pairs with csagent)",
+    "av|ThreatSonar 反勒索 / EDR": "TeamT5 ThreatSonar endpoint hunting and anti-ransomware component",
+    "av|奇安信天擎 客户端": "QiAnXin TianQing (ex-Intime) endpoint security client",
+    "av|Sophos 终端防护组件": "Sophos component (catch-all prefix: every Sophos* process belongs to Endpoint / Intercept X)",
+    "system|Windows UWP 服务实例 (Unistack)": "Windows Store / Unistack service instance (tasklist shows a random _xxxxx suffix, e.g. UnistoreSvc_efe21)",
+    "shell|curl 命令行工具": "curl command-line HTTP client (built into Windows 10+ and Linux); check who invokes it and what it downloads",
+    "other|UI.exe (通用界面进程)": "Generic process name shared by many products; confirm owner via install path and digital signature",
+    "other|spN.exe (未归属业务组件)": "Rule-based names sp3/sp4/sp6 not matching any public product; likely in-house or vendor component — verify path and signature"
+  });
+
   root.SIG_EN = SIG_EN;
   root.CMD_EN = CMD_EN;
   root.VENDOR_EN = VENDOR_EN;

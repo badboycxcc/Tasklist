@@ -386,6 +386,46 @@ assert(chipRes.findings.vpn.some(function (f) { return f.name === "Sophos Connec
 assert(chipRes.findings.av.some(function (f) { return f.name === "McAfee Security Scan Plus"; }), "识别出 McAfee Security Scan Plus (SSScheduler)");
 assert(chipRes.findings.vm.some(function (f) { return f.name.indexOf("USB 仲裁") !== -1; }), "识别出 VMware USB 仲裁服务");
 
+/* 6.5 真实环境补漏: 19 个此前未识别的进程 */
+console.log("\n== 补漏回归: Sophos / EDR / UWP / 通用进程 ==");
+var gapText = [
+  "映像名称                       PID 会话名              会话#       内存使用",
+  "========================= ======== ================ =========== ============",
+  "SophosFileScanner.exe         1204 Services                   0     18,204 K",
+  "SophosFileScanner.exe         1188 Services                   0     22,480 K",
+  "SEDService.exe                 992 Services                   0     31,220 K",
+  "SSPService.exe                1108 Services                   0     27,096 K",
+  "intimesec.exe                 2320 Services                   0     46,120 K",
+  "SophosNtpService.exe          1560 Services                   0     12,884 K",
+  "SophosNetFilter.exe           1704 Services                   0      9,412 K",
+  "CsFalconUIHost.exe            4808 Console                    1     38,660 K",
+  "McsAgent.exe                  2064 Services                   0     14,720 K",
+  "McsClient.exe                 2196 Services                   0     11,308 K",
+  "SophosFS.exe                  3140 Services                   0     20,916 K",
+  "UI.exe                        5024 Console                    1     24,116 K",
+  "SophosFIMService.exe          2788 Services                   0     16,540 K",
+  "UnistoreSvc_efe21             3612 Services                   0      7,804 K",
+  "ThreatSonar.exe               3980 Services                   0     52,288 K",
+  "SophosHealth.exe              4212 Services                   0     10,940 K",
+  "curl.exe                      5512 Console                    1      6,120 K",
+  "sp3.exe                       5904 Console                    1     18,860 K",
+  "sp4.exe                       6008 Console                    1     21,344 K",
+  "sp6.exe                       6210 Console                    1     19,772 K"
+].join("\n");
+var gapRes = A.analyze(P.parse(gapText, "w"));
+assert(gapRes.unresolved.length === 0, "19 个进程全部识别, 无未识别 (实际: " + JSON.stringify(gapRes.unresolved.map(function (u) { return u.raw; })) + ")");
+assert(gapRes.findings.av.some(function (f) { return f.name === "Sophos 文件扫描器 (File Scanner)"; }), "识别 SophosFileScanner");
+assert(gapRes.findings.av.some(function (f) { return f.name === "Sophos Endpoint Defense 服务 (SED)"; }), "识别 SEDService");
+assert(gapRes.findings.av.some(function (f) { return f.name === "Sophos System Protection 服务 (SSP)"; }), "识别 SSPService");
+assert(gapRes.findings.av.some(function (f) { return f.name === "奇安信天擎 客户端"; }), "识别 intimesec(奇安信天擎)");
+assert(gapRes.findings.av.some(function (f) { return f.name === "CrowdStrike Falcon UI Host"; }), "识别 CsFalconUIHost");
+assert(gapRes.findings.av.some(function (f) { return f.name.indexOf("MCS") !== -1; }), "识别 McsAgent/McsClient(Sophos MCS)");
+assert(gapRes.findings.av.some(function (f) { return f.name.indexOf("ThreatSonar") !== -1; }), "识别 ThreatSonar");
+assert(gapRes.groups.some(function (g) { return g.raw === "UnistoreSvc_efe21" && g.sig.cat === "system"; }), "UnistoreSvc_efe21 归为 Windows UWP 服务实例");
+assert(gapRes.groups.some(function (g) { return g.raw === "curl.exe" && g.sig.cat === "shell"; }), "curl.exe 归为命令行工具");
+assert(gapRes.groups.some(function (g) { return g.raw === "sp3.exe" && g.sig.cat === "other"; }), "sp3/sp4/sp6 给出归属线索(不再落未识别)");
+assert(gapRes.profile.some(function (l) { return l.indexOf("终端防护") !== -1; }), "画像提示目标受终端防护保护");
+
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");
 assert(P.cleanName("N/A") === "", "N/A 占位符被清洗为空 (不产生伪进程 A)");

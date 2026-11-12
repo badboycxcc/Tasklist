@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="lang-zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fscan Report Inspector · fscan 结果解析 · 按系统/端口/弱点分组</title>
+  <meta name="description" content="在线 fscan 结果解析工具（中/英）：粘贴 fscan 扫描结果，自动按操作系统分组、按 IP 汇总开放端口与服务、按弱点排序（已停止支持的 Windows、弱口令、未授权访问、高危端口），重点标记低版本 Windows。纯浏览器本地运行，数据不上传。" />
+  <meta name="keywords" content="fscan,结果解析,fscan 报告,渗透测试,信息收集,端口扫描,操作系统识别,弱口令,未授权访问,内网扫描" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fscan Report Inspector" />
+  <meta property="og:title" content="Fscan Report Inspector · fscan 结果解析" />
+  <meta property="og:description" content="粘贴 fscan 结果 → 按操作系统分组、按 IP 汇总端口与服务、按弱点排序。纯前端不上传，中英双语。" />
+  <meta property="og:url" content="https://tasklist.cxaqhq.cn/fscan.html" />
+  <meta property="og:image" content="https://tasklist.cxaqhq.cn/assets/og-image.png" />
+
+  <script>
+    (function () {
+      try {
+        var l = null;
+        var q = location.search.match(/[?&]lang=(zh|en)(?:&|$)/);
+        if (q) l = q[1];
+        if (!l) l = localStorage.getItem("tli-lang");
+        if (!l) l = ((navigator.language || "").toLowerCase().indexOf("zh") === 0) ? "zh" : "en";
+        if (l !== "en") l = "zh";
+        document.documentElement.className = "lang-" + l;
+        document.documentElement.lang = (l === "zh") ? "zh-CN" : "en";
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/css/style.css?v=1.6.7" />
+  <link rel="stylesheet" href="assets/css/fscan.css?v=1.6.7" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" style="text-decoration:none">
+        <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/>
+            </linearGradient>
+          </defs>
+          <rect x="4" y="4" width="56" height="56" rx="14" fill="#0f1721" stroke="url(#lg2)" stroke-width="3"/>
+          <path d="M18 22l10 10-10 10" stroke="url(#lg2)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M34 44h14" stroke="#e2e8f0" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-en">Fscan Report Inspector</span>
+        <span class="brand-cn" data-fs="brand.sub">fscan 结果解析</span>
+      </a>
+      <div class="spacer"></div>
+      <button id="langBtn" class="top-link" type="button" data-fs="lang.btn" data-fs-title="lang.title">EN</button>
+      <a class="top-link" href="index.html" data-fs="nav.back">进程分析</a>
+      <a class="top-link" href="https://github.com/badboycxcc/Tasklist" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <h1 data-fs="hero.h1">fscan 结果解析 · 一眼看清系统、端口与弱点</h1>
+      <p class="lead" data-fs="hero.lead">粘贴 fscan 的扫描结果，自动归一化成三张表：按操作系统分组（谁还是 Windows 2008 / 7 / 2003）、按 IP 汇总（开了哪些端口、跑的什么服务）、按弱点排序（弱口令、未授权、高危端口、组件过旧）——先打谁一目了然。</p>
+      <div class="hero-chips">
+        <span class="pill" data-fs-html="pill.1">按 <b>操作系统</b> 分组</span>
+        <span class="pill" data-fs-html="pill.2">按 <b>IP</b> 汇总端口服务</span>
+        <span class="pill" data-fs-html="pill.3">按 <b>弱点</b> 排序（含 EOL 系统）</span>
+        <span class="pill" data-fs-html="pill.4">纯浏览器本地 · <b>数据不上传</b></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2 data-fs="sec.input">① 粘贴 fscan 结果</h2>
+        <div class="spacer"></div>
+        <span class="input-meta" id="fsMeta"></span>
+      </div>
+      <textarea id="fsInput" spellcheck="false" data-fs-ph="ph.input" placeholder="粘贴 fscan 的输出（含 [+] 结果行、ip:port open 行、弱口令、未授权、POC 命中），也可以混入 nmap 结果..."></textarea>
+      <div class="input-actions">
+        <button id="fsBtnParse" class="btn btn-primary" data-fs="btn.parse">开始解析 (Ctrl/⌘ + Enter)</button>
+        <button id="fsBtnSample" class="btn" data-fs="btn.sample">fscan 示例</button>
+        <button id="fsBtnSampleV2" class="btn" data-fs="btn.sampleV2">fscan v2 示例</button>
+        <button id="fsBtnSampleMixed" class="btn" data-fs="btn.sampleMixed">nmap 混排示例</button>
+        <button id="fsBtnClear" class="btn" data-fs="btn.clear">清空</button>
+      </div>
+      <p class="privacy-note" data-fs="privacy">🔒 解析全部在浏览器本地完成，输入内容不会上传；页面无第三方依赖，可下载后离线使用。</p>
+    </section>
+
+    <section id="fsResults" class="hidden">
+
+      <div id="fsNote" class="parse-note hidden"></div>
+
+      <div id="fsStats" class="stat-grid"></div>
+
+      <section id="fsPriorityCard" class="card hidden">
+        <div class="card-head">
+          <h2 data-fs="sec.priority">⚡ 优先关注（按风险排序）</h2>
+          <div class="spacer"></div>
+          <span class="fs-hint" data-fs="hint.priority">先打这里：EOL 系统 / 弱口令 / 未授权 / 已知漏洞</span>
+        </div>
+        <div id="fsPriority"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div class="fs-tabs" id="fsTabs">
+            <button class="fs-tab active" data-tab="os" data-fs="tab.os">🖥️ 按操作系统</button>
+            <button class="fs-tab" data-tab="ip" data-fs="tab.ip">🌐 按 IP</button>
+            <button class="fs-tab" data-tab="risk" data-fs="tab.risk">⚠️ 按弱点</button>
+            <button class="fs-tab" data-tab="svc" data-fs="tab.svc">🧩 按服务</button>
+            <button class="fs-tab" data-tab="ports" data-fs="tab.ports">🔌 端口矩阵</button>
+          </div>
+          <div class="spacer"></div>
+          <input id="fsFilter" class="filter-input" data-fs-ph="ph.filter" placeholder="筛选 IP / 端口 / 服务 / 标题..." />
+        </div>
+
+        <div class="result-actions">
+          <button id="fsCopyAll" class="btn btn-sm btn-copy-all" data-fs="btn.copyAll" data-fs-title="tt.copyAll">📋 复制全部</button>
+          <button id="fsCopy" class="btn btn-sm" data-fs="btn.copy" data-fs-title="tt.copy">📋 机器</button>
+          <button id="fsCopySvc" class="btn btn-sm" data-fs="btn.copySvc" data-fs-title="tt.copySvc">🧩 服务</button>
+          <button id="fsCopyIp" class="btn btn-sm" data-fs="btn.copyIp" data-fs-title="tt.copyIp">🔌 IP</button>
+          <span class="fs-divider"></span>
+          <button id="fsMd" class="btn btn-sm" data-fs="btn.md">⬇ Markdown</button>
+          <button id="fsJson" class="btn btn-sm" data-fs="btn.json">⬇ JSON</button>
+          <button id="fsTxt" class="btn btn-sm" data-fs="btn.txt">⬇ TXT</button>
+          <span class="input-meta" id="fsCount"></span>
+        </div>
+
+        <div id="panelOs" class="fs-panel"></div>
+        <div id="panelIp" class="fs-panel hidden"></div>
+        <div id="panelRisk" class="fs-panel hidden"></div>
+        <div id="panelSvc" class="fs-panel hidden"></div>
+        <div id="panelPorts" class="fs-panel hidden"></div>
+      </section>
+
+      <section id="fsUnknownCard" class="card hidden">
+        <div class="card-head">
+          <h2 data-fs="sec.unknown">❓ 未识别的原始行</h2>
+          <div class="spacer"></div>
+          <span class="fs-hint" data-fs="hint.unknown">这些行没被解析（可复制给作者补规则），不影响其它结果</span>
+        </div>
+        <div id="fsUnknown" class="unresolved-chips"></div>
+      </section>
+
+    </section>
+
+    <section class="card guide">
+      <div class="card-head"><h2 data-fs="sec.guide">📖 支持的结果格式与解读口径</h2></div>
+      <div class="lang-zh">
+        <details open>
+          <summary>支持的 fscan 输出行</summary>
+          <pre>192.168.1.5:445 open                          # 端口开放行
+[+] 192.168.1.5:445	smb	Windows Server 2008 R2 7601
+[+] 192.168.1.5:22	ssh	root:123456              # 弱口令
+[+] 192.168.1.5:6379	redis	Redis unauthorized access   # 未授权
+[+] MS17-010 192.168.1.5 445                   # 漏洞命中
+[+] PocScan http://192.168.1.6/ poc-yaml-xxx   # POC 命中
+[+] http://192.168.1.7:8080	Apache Tomcat/7.0.47  # Web 标题
+
+# 也兼容 nmap 结果混排:
+Nmap scan report for 10.0.0.11
+80/tcp   open  http       Apache httpd 2.2.15 ((CentOS))</pre>
+        </details>
+        <details>
+          <summary>「弱点」是怎么判定的</summary>
+          <ul>
+            <li><b>系统已停止支持(EOL)</b>：识别出 Windows XP / 2003 / Vista / 7 / 2008 / 2008 R2 / 8 / 2012 / 2012 R2 / 10，以及 Ubuntu / CentOS / Debian / RHEL / ESXi 等版本，按官方支持终止日期判定是否已 EOL，并给出 EOL 日期。</li>
+            <li><b>弱口令</b>：从 fscan 的爆破结果里提取 <code>user:pass</code>；匿名账号（anonymous/guest）单独标为可直接登录。</li>
+            <li><b>未授权访问</b>：结果里出现 unauthorized / no auth / 未授权 字样（Redis、ES、Docker API、K8s、WebLogic 等）。</li>
+            <li><b>已知漏洞</b>：MS17-010、CVE-xxxx-xxxx、SMBGhost、BlueKeep、poc-yaml-* 等命中项。</li>
+            <li><b>高危端口</b>：445/139/135/3389/5985、1433/3306/5432/1521/27017/6379/9200/11211、2375、5900、23、2049 等，附可利用提示。</li>
+            <li><b>组件版本过旧</b>：Tomcat / Apache httpd / nginx / OpenSSH / OpenSSL / PHP / IIS / ProFTPD / vsftpd 等版本比对。</li>
+            <li><b>风险分</b>：0–100 累加（EOL 40 / 弱口令 40 / 漏洞 40 / 未授权 25 / 高危端口 8 / 组件 6–25），≥70 严重、≥50 高、≥25 中。</li>
+          </ul>
+        </details>
+        <details>
+          <summary>建议的 fscan 命令</summary>
+          <pre>fscan -h 192.168.1.0/24 -p 1-65535 -o result.txt   # 全端口 + 落文件
+fscan -h 192.168.1.0/24 -m smb,netbios -o s.txt    # 只探 NetBIOS/SMB 拿系统版本
+# 把 result.txt 内容整体粘到上面即可（banner、进度条、[*] 状态行会自动忽略）</pre>
+        </details>
+      </div>
+      <div class="lang-en">
+        <details open>
+          <summary>Supported fscan lines</summary>
+          <pre>192.168.1.5:445 open                          # open port
+[+] 192.168.1.5:445	smb	Windows Server 2008 R2 7601
+[+] 192.168.1.5:22	ssh	root:123456              # weak password
+[+] 192.168.1.5:6379	redis	Redis unauthorized access   # unauth
+[+] MS17-010 192.168.1.5 445                   # vuln hit
+[+] PocScan http://192.168.1.6/ poc-yaml-xxx   # POC hit
+[+] http://192.168.1.7:8080	Apache Tomcat/7.0.47  # web title
+
+# nmap output can be mixed in:
+Nmap scan report for 10.0.0.11
+80/tcp   open  http       Apache httpd 2.2.15 ((CentOS))</pre>
+        </details>
+        <details>
+          <summary>How weaknesses are scored</summary>
+          <ul>
+            <li><b>End-of-life OS</b>: Windows XP/2003/Vista/7/2008/2008 R2/8/2012/2012 R2/10, plus Ubuntu/CentOS/Debian/RHEL/ESXi versions — compared against official support end dates.</li>
+            <li><b>Weak credentials</b>: <code>user:pass</code> extracted from fscan brute-force hits; anonymous accounts are flagged separately.</li>
+            <li><b>Unauthenticated access</b>: lines containing unauthorized / no auth (Redis, ES, Docker API, K8s, WebLogic…).</li>
+            <li><b>Known vulnerabilities</b>: MS17-010, CVE-xxxx-xxxx, SMBGhost, BlueKeep, poc-yaml-*.</li>
+            <li><b>High-risk ports</b>: 445/139/135/3389/5985, 1433/3306/5432/1521/27017/6379/9200/11211, 2375, 5900, 23, 2049 and more.</li>
+            <li><b>Outdated components</b>: Tomcat / httpd / nginx / OpenSSH / OpenSSL / PHP / IIS / ProFTPD / vsftpd.</li>
+            <li><b>Risk score</b> 0–100 (EOL 40 / weak creds 40 / vuln 40 / unauth 25 / risky port 8 / component 6–25); ≥70 critical, ≥50 high, ≥25 medium.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="warn" data-fs="footer.warn">⚠️ 本工具仅供授权的安全测试、资产盘点与应急响应使用。</p>
+      <p>
+        <a href="index.html" data-fs="nav.back">进程分析</a> ·
+        <a href="https://github.com/badboycxcc/Tasklist" target="_blank" rel="noopener noreferrer">GitHub</a> ·
+        <a href="https://tasklist.cxaqhq.cn">tasklist.cxaqhq.cn</a>
+      </p>
+      <p data-fs="footer.local">纯静态页面：无后端、无跟踪、无第三方依赖，数据全部在浏览器本地处理。</p>
+    </div>
+  </footer>
+
+  <div id="toast"></div>
+
+  <script src="assets/js/i18n.js?v=1.6.7"></script>
+  <script src="assets/js/fscan.js?v=1.6.7"></script>
+  <script src="assets/js/fscan-samples.js?v=1.6.7"></script>
+  <script src="assets/js/fscan-app.js?v=1.6.7"></script>
+</body>
+</html>

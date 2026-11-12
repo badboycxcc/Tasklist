@@ -826,7 +826,32 @@
     { match: ["unsecapp"], name: "unsecapp.exe", vendor: "Microsoft", cat: "update", os: "w", desc: "WMI 事件接收进程" },
     { match: ["updateservice"], name: "UpdateService (通用更新服务)", vendor: "通用", cat: "update", os: "w", desc: "通用更新服务名(常见于 Exchange FIP-FS 内容扫描; 亦见于其他厂商), 建议按路径与签名确认" },
     { match: ["mousocoreworker"], name: "Windows 更新核心工作进程 (MoUsoCoreWorker)", vendor: "Microsoft", cat: "update", os: "w", desc: "Windows Update 会话编排核心工作进程" },
-    { match: ["monotificationux"], name: "Windows 更新通知 (MoNotificationUx)", vendor: "Microsoft", cat: "update", os: "w", desc: "Windows Update 通知界面(提示有待安装更新)" }
+    { match: ["monotificationux"], name: "Windows 更新通知 (MoNotificationUx)", vendor: "Microsoft", cat: "update", os: "w", desc: "Windows Update 通知界面(提示有待安装更新)" },
+
+    /* ---------- 终端安全: Sophos 全组件 / 其他 EDR 组件(按真实任务列表补) ---------- */
+    { match: ["sophosfilescanner"], name: "Sophos 文件扫描器 (File Scanner)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos Endpoint / Intercept X 的实时文件扫描组件(on-access scan)" },
+    { match: ["sophosntpservice"], name: "Sophos 网络威胁防护 (NTP)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos Network Threat Protection 服务(流量侧入侵检测/阻断)" },
+    { match: ["sophosnetfilter"], name: "Sophos 网络过滤服务", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos 网络过滤驱动配套服务(常与 NTP 同时出现)" },
+    { match: ["sophosfimservice"], name: "Sophos 文件完整性监控 (FIM)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos Intercept X File Integrity Monitoring 服务(监控关键目录改动)" },
+    { match: ["sophoshealth"], name: "Sophos 端点健康服务", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos 端点健康状态自检与上报服务" },
+    { match: ["sophosfs"], name: "Sophos 文件防护 (SophosFS)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos 文件防护/文件存储组件(随 Endpoint Agent 安装)" },
+    { match: ["sedservice"], name: "Sophos Endpoint Defense 服务 (SED)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos Intercept X 端点防御服务(恶意行为拦截核心组件)" },
+    { match: ["sspservice"], name: "Sophos System Protection 服务 (SSP)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos System Protection 服务(防护策略执行与 HIPS 侧拦截)" },
+    { match: ["mcsagent", "mcsclient"], name: "Sophos 管理通信组件 (MCS)", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos Management Communications System 代理/客户端(与 Sophos Central 通信、上报策略与状态; 若同名进程来自其他产品, 按路径确认)" },
+    { match: ["csfalconuihost"], name: "CrowdStrike Falcon UI Host", vendor: "CrowdStrike", cat: "av", os: "w", desc: "CrowdStrike Falcon 传感器界面宿主(托盘/通知, 与 csagent 服务配套)" },
+    { match: ["threatsonar"], name: "ThreatSonar 反勒索 / EDR", vendor: "TeamT5", cat: "av", os: "w", desc: "TeamT5 ThreatSonar 终端威胁狩猎与反勒索组件" },
+    { match: ["intimesec", "qaxsafe", "tianqing"], name: "奇安信天擎 客户端", vendor: "奇安信", cat: "av", os: "w", desc: "奇安信天擎(原网神 Intime)终端安全客户端进程" },
+    { match: ["sophos"], prefix: true, name: "Sophos 终端防护组件", vendor: "Sophos", cat: "av", os: "w", desc: "Sophos 系列组件兜底匹配(Sophos* 均属 Endpoint / Intercept X 家族)" },
+
+    /* ---------- Windows UWP / Unistack 服务实例 ---------- */
+    { match: ["unistoresvc", "udkusersvc", "userdatasvc", "cdpusersvc", "staterepository"], prefix: true, name: "Windows UWP 服务实例 (Unistack)", vendor: "Microsoft", cat: "system", os: "w", desc: "Windows 应用商店/Unistack 服务实例(tasklist 里带 _xxxxx 随机后缀, 如 UnistoreSvc_efe21), 属系统组件" },
+
+    /* ---------- 命令行工具 ---------- */
+    { match: ["curl"], name: "curl 命令行工具", vendor: "Daniel Stenberg", cat: "shell", os: "b", desc: "命令行 HTTP 客户端(Windows 10+ 内置 curl.exe / Linux 自带); 排查重点: 谁在调用、下载了什么" },
+
+    /* ---------- 未能归属的通用进程名(至少给出排查线索, 不再落未识别) ---------- */
+    { match: ["ui"], name: "UI.exe (通用界面进程)", vendor: "(未确认)", cat: "other", os: "w", desc: "通用进程名, 多款软件共用; 结合安装路径与数字签名确认归属(常见于厂商客户端托盘/界面进程)" },
+    { match: ["sp3", "sp4", "sp6"], name: "spN.exe (未归属业务组件)", vendor: "(未确认)", cat: "other", os: "w", desc: "sp3/sp4/sp6 这类规则化命名未对应到公开软件, 疑似业务系统或厂商自研组件; 建议取路径与签名(Get-AuthenticodeSignature / sigcheck)确认" }
   ];
 
   /* ========== 命令行关键字签名 ==========

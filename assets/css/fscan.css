@@ -1,0 +1,408 @@
+/* ============================================================
+   Fscan Report Inspector - 增量样式
+   复用 style.css 的设计令牌(--bg/--panel/--cyan/--mono 等)
+   ============================================================ */
+
+/* ---------- 输入区(沿用进程分析页的观感) ---------- */
+textarea#fsInput {
+  width: 100%;
+  min-height: 230px;
+  resize: vertical;
+  background: #0a1018;
+  color: var(--txt);
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: var(--mono);
+  font-size: 12.8px;
+  line-height: 1.55;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+textarea#fsInput:focus {
+  border-color: rgba(34, 211, 238, .55);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, .12);
+}
+textarea#fsInput::placeholder { color: var(--txt3); }
+
+.card-head .input-meta { margin-left: 12px; }
+
+/* ---------- 视图切换 ---------- */
+.fs-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.fs-tab {
+  appearance: none;
+  background: rgba(148, 163, 184, .07);
+  border: 1px solid var(--line);
+  color: var(--txt2);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all .15s ease;
+  white-space: nowrap;
+}
+.fs-tab:hover { color: var(--txt); border-color: var(--line2); }
+.fs-tab.active {
+  color: #a5f3fc;
+  background: rgba(34, 211, 238, .12);
+  border-color: rgba(34, 211, 238, .42);
+  font-weight: 600;
+}
+
+.fs-panel { margin-top: 14px; }
+
+.fs-hint { color: var(--txt3); font-size: 12px; }
+
+/* ---------- 通用小件 ---------- */
+.fs-dim { color: var(--txt3); }
+.fs-tip { color: var(--txt3); font-size: 12.5px; margin: 12px 0 0; }
+
+.fs-lv {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 1px 8px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  line-height: 1.7;
+}
+.fs-lv.lv-critical { background: rgba(248, 113, 113, .16); border-color: rgba(248, 113, 113, .45); color: #fecaca; }
+.fs-lv.lv-high { background: rgba(251, 146, 60, .14); border-color: rgba(251, 146, 60, .4); color: #fed7aa; }
+.fs-lv.lv-medium { background: rgba(251, 191, 36, .12); border-color: rgba(251, 191, 36, .34); color: #fde68a; }
+.fs-lv.lv-low { background: rgba(52, 211, 153, .12); border-color: rgba(52, 211, 153, .3); color: #a7f3d0; }
+.fs-lv.lv-info { background: rgba(148, 163, 184, .12); border-color: var(--line2); color: var(--txt2); }
+
+/* ---------- 优先关注 ---------- */
+#fsPriority { display: flex; flex-direction: column; gap: 6px; }
+
+.fs-pri {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: rgba(148, 163, 184, .045);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line2);
+}
+.fs-pri.lv-critical { border-left-color: var(--red); background: rgba(248, 113, 113, .06); }
+.fs-pri.lv-high { border-left-color: var(--orange); background: rgba(251, 146, 60, .05); }
+
+.fs-pri-ip { font-family: var(--mono); font-size: 12.8px; color: #c4f1fa; }
+.fs-pri-kind {
+  font-size: 11.5px;
+  color: var(--txt2);
+  background: rgba(148, 163, 184, .12);
+  border-radius: 5px;
+  padding: 1px 7px;
+}
+.fs-pri-title { font-size: 13px; font-weight: 600; }
+.fs-pri-detail { font-size: 12px; color: var(--txt3); flex: 1 1 100%; }
+
+/* ---------- 操作系统 / IP 列表 ---------- */
+.fs-eol {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fecaca;
+  background: rgba(248, 113, 113, .14);
+  border: 1px solid rgba(248, 113, 113, .42);
+  border-radius: 6px;
+  padding: 1px 8px;
+}
+
+.fs-ip { font-family: var(--mono); font-size: 13px; color: #c4f1fa; }
+.fs-hostname {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--txt2);
+  background: rgba(148, 163, 184, .1);
+  border-radius: 5px;
+  padding: 1px 7px;
+}
+.fs-os { font-size: 12.5px; color: var(--txt2); }
+
+.fs-score {
+  display: inline-block;
+  min-width: 34px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 1px 7px;
+  border: 1px solid var(--line2);
+  color: var(--txt2);
+}
+.fs-score.lv-critical { color: #fecaca; background: rgba(248, 113, 113, .16); border-color: rgba(248, 113, 113, .45); }
+.fs-score.lv-high { color: #fed7aa; background: rgba(251, 146, 60, .14); border-color: rgba(251, 146, 60, .4); }
+.fs-score.lv-medium { color: #fde68a; background: rgba(251, 191, 36, .1); border-color: rgba(251, 191, 36, .3); }
+.fs-score.lv-low { color: #a7f3d0; background: rgba(52, 211, 153, .1); border-color: rgba(52, 211, 153, .28); }
+
+/* 端口胶囊 */
+.fs-ports { display: flex; flex-wrap: wrap; gap: 5px; max-width: 520px; }
+.fs-ports-inline { max-width: 640px; }
+
+.fs-port {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  border-radius: 6px;
+  padding: 1px 7px;
+  background: rgba(148, 163, 184, .09);
+  border: 1px solid var(--line);
+  color: var(--txt);
+  white-space: nowrap;
+}
+.fs-port i {
+  font-style: normal;
+  font-size: 10.5px;
+  color: var(--txt3);
+  text-transform: lowercase;
+}
+.fs-port.lv-high { background: rgba(251, 146, 60, .1); border-color: rgba(251, 146, 60, .34); }
+.fs-port.lv-high i { color: rgba(254, 215, 170, .8); }
+.fs-port.lv-medium { background: rgba(251, 191, 36, .09); border-color: rgba(251, 191, 36, .3); }
+.fs-port.lv-critical { background: rgba(248, 113, 113, .12); border-color: rgba(248, 113, 113, .38); }
+.fs-port.more { color: var(--txt3); background: transparent; }
+
+.fs-brief {
+  display: inline-block;
+  font-size: 11.5px;
+  border-radius: 6px;
+  padding: 1px 7px;
+  margin: 0 4px 4px 0;
+  background: rgba(148, 163, 184, .1);
+  border: 1px solid var(--line);
+  color: var(--txt2);
+}
+.fs-brief.lv-critical { background: rgba(248, 113, 113, .1); border-color: rgba(248, 113, 113, .34); color: #fecaca; }
+.fs-brief.lv-high { background: rgba(251, 146, 60, .1); border-color: rgba(251, 146, 60, .3); color: #fed7aa; }
+.fs-brief.lv-medium { background: rgba(251, 191, 36, .09); border-color: rgba(251, 191, 36, .28); color: #fde68a; }
+
+/* ---------- 主机卡片(按 IP 视图) ---------- */
+.host-card > summary { gap: 10px; }
+.host-card > summary .fs-ip { font-size: 13.5px; font-weight: 700; }
+
+.fs-block { border-top: 1px solid var(--line); padding: 10px 14px 12px; }
+.fs-block-h {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--txt2);
+  margin-bottom: 6px;
+  letter-spacing: .02em;
+}
+
+.fs-cred, .fs-vuln, .fs-web, .fs-finding {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  padding: 3px 0;
+}
+.fs-cred code {
+  font-family: var(--mono);
+  color: #fde68a;
+  background: rgba(251, 191, 36, .1);
+  border: 1px solid rgba(251, 191, 36, .28);
+  border-radius: 5px;
+  padding: 1px 7px;
+}
+.fs-vuln code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #fed7aa;
+}
+.fs-web a { font-family: var(--mono); font-size: 12px; color: var(--cyan); word-break: break-all; }
+
+.fs-finding .fs-f-kind {
+  font-size: 11px;
+  color: var(--txt2);
+  background: rgba(148, 163, 184, .12);
+  border-radius: 5px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+.fs-finding .fs-f-title { font-weight: 600; color: var(--txt); }
+.fs-finding .fs-f-detail { color: var(--txt3); font-size: 12px; flex: 1 1 100%; padding-left: 2px; }
+
+/* ---------- 弱点视图 ---------- */
+.fs-risk-group > summary { align-items: center; }
+.fs-risk-list { padding: 4px 0 10px; }
+
+.fs-risk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.fs-risk-item:last-child { border-bottom: none; }
+.fs-risk-item.lv-critical { background: rgba(248, 113, 113, .035); }
+.fs-risk-item.lv-high { background: rgba(251, 146, 60, .03); }
+
+.fs-risk-ip {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: #c4f1fa;
+  white-space: nowrap;
+  min-width: 122px;
+}
+.fs-risk-body { flex: 1; min-width: 220px; }
+.fs-risk-title { font-size: 13px; font-weight: 600; }
+.fs-risk-detail { font-size: 12.5px; color: var(--txt2); margin-top: 1px; }
+.fs-risk-ev {
+  font-size: 11.5px;
+  color: var(--txt3);
+  margin-top: 3px;
+  word-break: break-all;
+}
+.fs-risk-ev code { font-family: var(--mono); color: var(--txt3); }
+
+/* ---------- 端口矩阵 ---------- */
+.fs-ip-chip {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--txt2);
+  background: rgba(148, 163, 184, .09);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0 6px;
+  margin: 2px 3px 2px 0;
+  display: inline-block;
+}
+
+/* ---------- 窄屏 ---------- */
+@media (max-width: 720px) {
+  .fs-tab { padding: 5px 10px; font-size: 12px; }
+  .fs-risk-ip { min-width: 0; }
+  .fs-ports { max-width: 100%; }
+  .fs-pri-detail { font-size: 11.5px; }
+  textarea#fsInput { min-height: 170px; }
+}
+
+/* ---------- 系统家族标签 ---------- */
+.fs-fam {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  border-radius: 4px;
+  padding: 1px 6px;
+  border: 1px solid var(--line2);
+  color: var(--txt2);
+  background: rgba(148, 163, 184, .1);
+  vertical-align: middle;
+}
+.fs-fam.fam-windows { color: #a5b4fc; border-color: rgba(129, 140, 248, .38); background: rgba(129, 140, 248, .13); }
+.fs-fam.fam-linux { color: #fde68a; border-color: rgba(251, 191, 36, .34); background: rgba(251, 191, 36, .1); }
+.fs-fam.fam-unix { color: #a7f3d0; border-color: rgba(52, 211, 153, .3); background: rgba(52, 211, 153, .1); }
+.fs-fam.fam-vmware { color: #ddd6fe; border-color: rgba(167, 139, 250, .34); background: rgba(167, 139, 250, .12); }
+.fs-fam.fam-network { color: #a5f3fc; border-color: rgba(34, 211, 238, .32); background: rgba(34, 211, 238, .1); }
+.fs-fam.fam-unknown { color: var(--txt3); }
+
+.fs-risk-more { padding: 8px 14px 12px; color: var(--txt3); font-size: 12px; }
+
+/* ---------- 主机线索 / 邻接 IP / Web 资产明细 ---------- */
+.fs-host-meta {
+  padding: 6px 14px 8px;
+  font-size: 11.5px;
+  color: var(--txt3);
+  font-family: var(--mono);
+  border-bottom: 1px solid var(--line);
+}
+
+.fs-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.fs-ip-chip {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--txt2);
+  background: rgba(148, 163, 184, .09);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 7px;
+}
+.fs-ip-chip.cross {
+  color: #fde68a;
+  background: rgba(251, 191, 36, .1);
+  border-color: rgba(251, 191, 36, .32);
+}
+
+.fs-web {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  padding: 3px 0;
+}
+.fs-web a { font-family: var(--mono); font-size: 12px; color: var(--cyan); word-break: break-all; }
+.fs-http {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 0 6px;
+  border: 1px solid var(--line2);
+  color: var(--txt2);
+}
+.fs-http.lv-low { color: #a7f3d0; border-color: rgba(52, 211, 153, .3); background: rgba(52, 211, 153, .1); }
+.fs-http.lv-medium { color: #fde68a; border-color: rgba(251, 191, 36, .3); background: rgba(251, 191, 36, .1); }
+.fs-http.lv-high { color: #fecaca; border-color: rgba(248, 113, 113, .35); background: rgba(248, 113, 113, .12); }
+.fs-web-title { color: var(--txt); }
+.fs-tags { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.fs-tags i {
+  font-style: normal;
+  font-size: 10.5px;
+  color: var(--txt3);
+  background: rgba(148, 163, 184, .08);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0 5px;
+}
+
+/* 统计卡在本页有 8 项, 压低最小宽度避免最后一张单独换行 */
+#fsStats { grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); }
+
+/* ---------- 服务分类标签 ---------- */
+.fs-svc-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 1px 9px;
+  border: 1px solid var(--line2);
+  color: var(--txt);
+  background: rgba(148, 163, 184, .1);
+}
+.fs-svc-tag.svc-web { color: #a5f3fc; border-color: rgba(34, 211, 238, .35); background: rgba(34, 211, 238, .12); }
+.fs-svc-tag.svc-ssh { color: #fde68a; border-color: rgba(251, 191, 36, .32); background: rgba(251, 191, 36, .1); }
+.fs-svc-tag.svc-db { color: #ddd6fe; border-color: rgba(167, 139, 250, .34); background: rgba(167, 139, 250, .12); }
+.fs-svc-tag.svc-remote { color: #fed7aa; border-color: rgba(251, 146, 60, .34); background: rgba(251, 146, 60, .1); }
+.fs-svc-tag.svc-smb { color: #fecaca; border-color: rgba(248, 113, 113, .32); background: rgba(248, 113, 113, .1); }
+
+/* 复制/下载分组分隔 */
+.fs-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--line2);
+  display: inline-block;
+  margin: 0 2px;
+}
+.btn-copy-all {
+  border-color: rgba(34, 211, 238, .45) !important;
+  color: #a5f3fc !important;
+  background: rgba(34, 211, 238, .1) !important;
+  font-weight: 600;
+}
+.btn-copy-all:hover { background: rgba(34, 211, 238, .18) !important; }

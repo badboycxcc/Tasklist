@@ -431,6 +431,23 @@ assert(gapRes.groups.some(function (g) { return g.raw === "curl.exe" && g.sig.ca
 assert(gapRes.groups.some(function (g) { return g.raw === "sp3.exe" && g.sig.cat === "other"; }), "sp3/sp4/sp6 给出归属线索(不再落未识别)");
 assert(gapRes.profile.some(function (l) { return l.indexOf("终端防护") !== -1; }), "画像提示目标受终端防护保护");
 
+/* HitmanPro.Alert / HitmanPro 扫描器 分开识别 */
+var hmpRes = A.analyze(P.parse([
+  "映像名称                       PID 会话名              会话#       内存使用",
+  "========================= ======== ================ =========== ============",
+  "hmpalert.exe                  1488 Services                   0     22,640 K",
+  "hmpalertsvc.exe               1912 Services                   0      8,320 K",
+  "HitmanPro.Alert.exe           3300 Console                    1     14,110 K",
+  "HitmanPro.exe                 4410 Console                    1     21,004 K",
+  "savservice.exe                1020 Services                   0     18,772 K"
+].join("\n"), "w"));
+assert(hmpRes.unresolved.length === 0, "HitmanPro 系列进程全部识别 (实际未识别: " + hmpRes.unresolved.length + ")");
+assert(hmpRes.groups.some(function (g) { return g.raw === "hmpalert.exe" && g.sig.name.indexOf("HitmanPro.Alert") !== -1; }), "hmpalert.exe 识别为 HitmanPro.Alert");
+assert(hmpRes.groups.some(function (g) { return g.raw === "hmpalertsvc.exe" && g.sig.name.indexOf("HitmanPro.Alert") !== -1; }), "hmpalertsvc.exe(服务名) 同样归到 HitmanPro.Alert");
+assert(hmpRes.groups.some(function (g) { return g.raw === "HitmanPro.Alert.exe" && g.sig.name.indexOf("HitmanPro.Alert") !== -1; }), "HitmanPro.Alert.exe 不会被当成扫描器");
+assert(hmpRes.groups.some(function (g) { return g.raw === "HitmanPro.exe" && g.sig.name === "HitmanPro 扫描器"; }), "HitmanPro.exe 归为按需扫描器");
+assert(hmpRes.groups.some(function (g) { return g.raw === "savservice.exe" && g.sig.name.indexOf("SAVService") !== -1; }), "savservice 归为 Sophos 主服务");
+
 /* 7. 边界用例 */
 console.log("\n== 边界用例 ==");
 assert(P.cleanName("N/A") === "", "N/A 占位符被清洗为空 (不产生伪进程 A)");

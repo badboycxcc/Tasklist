@@ -3,6 +3,19 @@
 本文件记录 **TaskList Inspector** 的重要变更，格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 日期为提交日期；本项目尚未打 tag，条目按时间倒序排列。
 
+## 2026-11-05-hitmanpro
+
+### 新增
+
+- **HitmanPro.Alert 独立识别**（此前只作为 `hmpalert` 混在通用 `Sophos` 条目里）：
+  - `hmpalert.exe` / `hmpalertsvc.exe` / `HitmanPro.Alert.exe` → **HitmanPro.Alert (Sophos)**，描述含 CryptoGuard 反勒索、exploit 缓解、键盘加密、摄像头防护
+  - `HitmanPro.exe` → **HitmanPro 扫描器**（Sophos 的按需扫描器，与常驻 Alert 同目录但用途不同）
+  - 前缀匹配同时覆盖 `hmpalert*` 与 `hitmanpro.alert*`；`hitmanpro.exe` 走扫描器条目，靠「最长前缀优先」保证不串
+  - `savservice.exe` 单独列出为 **Sophos 终端防护服务 (SAVService)**
+- 签名库 564 → **567 条**
+- 自测新增 6 项断言（三个 Alert 变体 + 扫描器区分 + savservice 归属）
+- 资源版本号 `?v=1.6.9`
+
 ## 2026-11-05-修正
 
 ### 修复
